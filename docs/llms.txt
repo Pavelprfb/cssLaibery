@@ -1,0 +1,46 @@
+# Laibery
+
+> Laibery is a zero-build runtime utility CSS engine. A class like b$2$s$red is parsed in the browser and turned into real CSS. It ships 520 CSS properties, curated aliases, variants, theme variables, and site-CSS override by default.
+
+Version: 0.2.0  
+License: MIT  
+Canonical docs: docs/index.html  
+Full AI docs: docs/llms-full.txt  
+Structured data: docs/classes.json  
+Markdown reference: docs/aliases.md  
+
+## Install on any website
+
+```html
+<script src="https://your-host.example/laibery.js"></script>
+<div class="b$2$s$red p$16 r$8">Hello</div>
+```
+
+Auto-start is on. You do not need to call Laibery.start(). Classes without $ are ignored. Every utility token must contain $.
+
+## Syntax
+
+[variant: ...] property$value[$value...]
+
+- b$2$s$red -> border-width:2px!important; border-style:solid!important; border-color:red!important
+- p$16 -> padding:16px!important
+- hover:bg$primary -> background-color on hover
+- md:cols$3 -> 3-column grid from 768px
+- dark:bg$dark -> dark background inside class="dark"
+
+## Critical rules
+
+- Values cannot contain spaces, ;, {, }, <, >, or backslash. $ separates values.
+- Bare numbers become px for length properties. pct becomes %. Palette names become var(--lb-*). Hex colors may omit #.
+- Default output uses !important and the stylesheet is kept last, so normal site CSS loses.
+- Opt out with Laibery.config({ important: false }).
+- CSP: set window.__LAIBERY_CONFIG__ = { nonce: "..." } before loading, or Laibery.config({ nonce: "..." }).
+- Conflicts: d = display (SVG d is svg-d); r = border-radius (SVG r is svg-r); z = z-index (zoom is zoom).
+- Full property names always work (with the d/r/zoom exceptions above), so prefer them when unsure.
+
+## Where to read more
+
+- Human documentation and search: docs/index.html
+- Every one of the 520 properties with examples: docs/aliases.md and docs/classes.json
+- Full Markdown for LLM context: docs/llms-full.txt
+- Demo: demo/index.html

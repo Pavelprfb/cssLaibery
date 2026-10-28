@@ -1,0 +1,4941 @@
+{
+  "name": "Laibery",
+  "version": "0.2.0",
+  "license": "MIT",
+  "description": "Runtime utility CSS generated from class names. Every class token contains $, for example b$2$s$red -> border: 2px solid red.",
+  "canonicalDocs": "docs/index.html",
+  "syntax": "[variant: ...] property$value[$value...]",
+  "styleElementId": "laibery-styles",
+  "defaultImportant": true,
+  "install": {
+    "scriptTag": "<script src=\"laibery.js\"></script>",
+    "hostedScriptTag": "<script src=\"https://your-host.example/laibery.js\"></script>",
+    "autoStart": true,
+    "note": "Load one JavaScript file. It scans the DOM and observes changes. No build step and no separate CSS file."
+  },
+  "override": {
+    "enabledByDefault": true,
+    "mechanism": "Generated declarations use !important and the generated stylesheet is kept last in the document.",
+    "caveats": [
+      "A site inline style with !important wins.",
+      "A site !important rule with higher specificity wins.",
+      "Strict CSP needs a nonce.",
+      "Shadow DOM is not scanned.",
+      "Cascade layers with !important should be tested."
+    ]
+  },
+  "config": {
+    "read": "Laibery.config()",
+    "set": "Laibery.config({ important, nonce })",
+    "globalBeforeLoad": "window.__LAIBERY_CONFIG__ = { important, nonce }",
+    "defaults": {
+      "important": true,
+      "nonce": ""
+    }
+  },
+  "variants": {
+    "pseudoClasses": [
+      "hover",
+      "focus",
+      "focus-visible",
+      "focus-within",
+      "active",
+      "visited",
+      "disabled",
+      "checked",
+      "required",
+      "invalid",
+      "empty",
+      "first",
+      "last",
+      "only",
+      "odd",
+      "even"
+    ],
+    "breakpoints": {
+      "sm": 640,
+      "md": 768,
+      "lg": 1024,
+      "xl": 1280,
+      "2xl": 1536
+    },
+    "dark": "dark: targets descendants of an element with class=\"dark\""
+  },
+  "values": [
+    {
+      "write": "p$16, w$240",
+      "result": "Bare numbers become px for length properties."
+    },
+    {
+      "write": "m$-8",
+      "result": "Negative values are allowed."
+    },
+    {
+      "write": "w$50pct or w$50%",
+      "result": "Percentages. pct avoids % in class names."
+    },
+    {
+      "write": "fz$1.25rem, h$80vh",
+      "result": "CSS length units pass through."
+    },
+    {
+      "write": "w$full, h$screen",
+      "result": "100% width / 100vh height. w$screen is 100vw."
+    },
+    {
+      "write": "w$fit, w$min, w$max",
+      "result": "fit-content, min-content, max-content."
+    },
+    {
+      "write": "mx$auto",
+      "result": "auto."
+    },
+    {
+      "write": "bg$ff0000",
+      "result": "#ff0000. Hex with or without #; 3, 4, 6 or 8 digits."
+    },
+    {
+      "write": "bg$primary",
+      "result": "var(--lb-primary). Palette names become theme variables."
+    },
+    {
+      "write": "op$50",
+      "result": "0.5. Opacity treats integers as percentages."
+    },
+    {
+      "write": "cols$3",
+      "result": "repeat(3, minmax(0, 1fr))."
+    },
+    {
+      "write": "gap$8$16",
+      "result": "8px 16px."
+    },
+    {
+      "write": "ar$16$9",
+      "result": "16 / 9."
+    },
+    {
+      "write": "content$'hello'",
+      "result": "content: 'hello'."
+    },
+    {
+      "write": "background-image$url(https://example.com/a.png)",
+      "result": "URLs work because the parser splits at the first $."
+    }
+  ],
+  "curated": [
+    {
+      "group": "Layout",
+      "aliases": [
+        "d"
+      ],
+      "property": "display",
+      "example": "d$flex",
+      "note": "Display aliases: f flex, g grid, b block, ib inline-block, i inline, n none, if inline-flex, ig inline-grid, t table, tc table-cell, li list-item, c contents, fr flow-root.",
+      "anchor": "alias-d"
+    },
+    {
+      "group": "Layout",
+      "aliases": [
+        "pos"
+      ],
+      "property": "position",
+      "example": "pos$sticky",
+      "note": "relative, absolute, fixed, sticky and other CSS keywords.",
+      "anchor": "alias-pos"
+    },
+    {
+      "group": "Layout",
+      "aliases": [
+        "top",
+        "right",
+        "bottom",
+        "left"
+      ],
+      "property": "top / right / bottom / left",
+      "example": "top$0",
+      "note": "Bare numbers become px.",
+      "anchor": "alias-top"
+    },
+    {
+      "group": "Layout",
+      "aliases": [
+        "z"
+      ],
+      "property": "z-index",
+      "example": "z$10",
+      "note": "Laibery uses z for z-index. The map uses z for zoom, which is available as zoom$1.5.",
+      "anchor": "alias-z"
+    },
+    {
+      "group": "Layout",
+      "aliases": [
+        "float"
+      ],
+      "property": "float",
+      "example": "float$left",
+      "note": "",
+      "anchor": "alias-float"
+    },
+    {
+      "group": "Layout",
+      "aliases": [
+        "ar"
+      ],
+      "property": "aspect-ratio",
+      "example": "ar$16$9",
+      "note": "Separate the two sides with $.",
+      "anchor": "alias-ar"
+    },
+    {
+      "group": "Layout",
+      "aliases": [
+        "ov",
+        "ovx",
+        "ovy"
+      ],
+      "property": "overflow / overflow-x / overflow-y",
+      "example": "ov$hidden",
+      "note": "",
+      "anchor": "alias-ov"
+    },
+    {
+      "group": "Flex & Grid",
+      "aliases": [
+        "flex"
+      ],
+      "property": "flex",
+      "example": "flex$1",
+      "note": "",
+      "anchor": "alias-flex"
+    },
+    {
+      "group": "Flex & Grid",
+      "aliases": [
+        "grow",
+        "shrink"
+      ],
+      "property": "flex-grow / flex-shrink",
+      "example": "grow$1",
+      "note": "",
+      "anchor": "alias-grow"
+    },
+    {
+      "group": "Flex & Grid",
+      "aliases": [
+        "order"
+      ],
+      "property": "order",
+      "example": "order$2",
+      "note": "",
+      "anchor": "alias-order"
+    },
+    {
+      "group": "Flex & Grid",
+      "aliases": [
+        "fd"
+      ],
+      "property": "flex-direction",
+      "example": "fd$col",
+      "note": "r row, c column, rr row-reverse, cr column-reverse. Full words also work.",
+      "anchor": "alias-fd"
+    },
+    {
+      "group": "Flex & Grid",
+      "aliases": [
+        "wrap"
+      ],
+      "property": "flex-wrap",
+      "example": "wrap$wrap",
+      "note": "wrap, nowrap, wrap-reverse.",
+      "anchor": "alias-wrap"
+    },
+    {
+      "group": "Flex & Grid",
+      "aliases": [
+        "justify"
+      ],
+      "property": "justify-content",
+      "example": "justify$sb",
+      "note": "",
+      "anchor": "alias-justify"
+    },
+    {
+      "group": "Flex & Grid",
+      "aliases": [
+        "items"
+      ],
+      "property": "align-items",
+      "example": "items$c",
+      "note": "",
+      "anchor": "alias-items"
+    },
+    {
+      "group": "Flex & Grid",
+      "aliases": [
+        "self"
+      ],
+      "property": "align-self",
+      "example": "self$e",
+      "note": "",
+      "anchor": "alias-self"
+    },
+    {
+      "group": "Flex & Grid",
+      "aliases": [
+        "gap"
+      ],
+      "property": "gap",
+      "example": "gap$16",
+      "note": "Accepts one or two values: gap$8$16.",
+      "anchor": "alias-gap"
+    },
+    {
+      "group": "Flex & Grid",
+      "aliases": [
+        "gapx",
+        "gapy"
+      ],
+      "property": "column-gap / row-gap",
+      "example": "gapx$24",
+      "note": "",
+      "anchor": "alias-gapx"
+    },
+    {
+      "group": "Flex & Grid",
+      "aliases": [
+        "cols",
+        "rows"
+      ],
+      "property": "grid-template-columns / grid-template-rows",
+      "example": "cols$3",
+      "note": "cols$3 becomes repeat(3, minmax(0, 1fr)).",
+      "anchor": "alias-cols"
+    },
+    {
+      "group": "Size & Spacing",
+      "aliases": [
+        "w",
+        "h"
+      ],
+      "property": "width / height",
+      "example": "w$full",
+      "note": "full, screen, fit, min, max, percentages and CSS lengths.",
+      "anchor": "alias-w"
+    },
+    {
+      "group": "Size & Spacing",
+      "aliases": [
+        "minw",
+        "maxw"
+      ],
+      "property": "min-width / max-width",
+      "example": "maxw$960",
+      "note": "",
+      "anchor": "alias-minw"
+    },
+    {
+      "group": "Size & Spacing",
+      "aliases": [
+        "minh",
+        "maxh"
+      ],
+      "property": "min-height / max-height",
+      "example": "maxh$80vh",
+      "note": "",
+      "anchor": "alias-minh"
+    },
+    {
+      "group": "Size & Spacing",
+      "aliases": [
+        "p",
+        "px",
+        "py",
+        "pt",
+        "pr",
+        "pb",
+        "pl"
+      ],
+      "property": "padding",
+      "example": "p$8$16",
+      "note": "p accepts 1–4 values like the CSS shorthand. px/py set both sides.",
+      "anchor": "alias-p"
+    },
+    {
+      "group": "Size & Spacing",
+      "aliases": [
+        "m",
+        "mx",
+        "my",
+        "mt",
+        "mr",
+        "mb",
+        "ml"
+      ],
+      "property": "margin",
+      "example": "m$16",
+      "note": "Negative values work: m$-8. mx$auto centers a block.",
+      "anchor": "alias-m"
+    },
+    {
+      "group": "Typography",
+      "aliases": [
+        "fz"
+      ],
+      "property": "font-size",
+      "example": "fz$16",
+      "note": "",
+      "anchor": "alias-fz"
+    },
+    {
+      "group": "Typography",
+      "aliases": [
+        "fw"
+      ],
+      "property": "font-weight",
+      "example": "fw$bold",
+      "note": "Weight aliases: thin 100, extralight 200, light 300, normal/n 400, medium/m 500, semibold/sb 600, bold/b 700, extrabold/eb 800, black 900.",
+      "anchor": "alias-fw"
+    },
+    {
+      "group": "Typography",
+      "aliases": [
+        "ff"
+      ],
+      "property": "font-family",
+      "example": "ff$sans",
+      "note": "sans, serif and mono map to theme font stacks.",
+      "anchor": "alias-ff"
+    },
+    {
+      "group": "Typography",
+      "aliases": [
+        "fi"
+      ],
+      "property": "font-style",
+      "example": "fi$italic",
+      "note": "",
+      "anchor": "alias-fi"
+    },
+    {
+      "group": "Typography",
+      "aliases": [
+        "lh"
+      ],
+      "property": "line-height",
+      "example": "lh$1.5",
+      "note": "1.5 stays unitless; 24 becomes 24px.",
+      "anchor": "alias-lh"
+    },
+    {
+      "group": "Typography",
+      "aliases": [
+        "ls"
+      ],
+      "property": "letter-spacing",
+      "example": "ls$1",
+      "note": "",
+      "anchor": "alias-ls"
+    },
+    {
+      "group": "Typography",
+      "aliases": [
+        "ta"
+      ],
+      "property": "text-align",
+      "example": "ta$c",
+      "note": "",
+      "anchor": "alias-ta"
+    },
+    {
+      "group": "Typography",
+      "aliases": [
+        "td"
+      ],
+      "property": "text-decoration",
+      "example": "td$u",
+      "note": "u underline, n none, l line-through.",
+      "anchor": "alias-td"
+    },
+    {
+      "group": "Typography",
+      "aliases": [
+        "tt"
+      ],
+      "property": "text-transform",
+      "example": "tt$u",
+      "note": "",
+      "anchor": "alias-tt"
+    },
+    {
+      "group": "Typography",
+      "aliases": [
+        "ws"
+      ],
+      "property": "white-space",
+      "example": "ws$nowrap",
+      "note": "",
+      "anchor": "alias-ws"
+    },
+    {
+      "group": "Typography",
+      "aliases": [
+        "c"
+      ],
+      "property": "color",
+      "example": "c$primary",
+      "note": "",
+      "anchor": "alias-c"
+    },
+    {
+      "group": "Typography",
+      "aliases": [
+        "bg"
+      ],
+      "property": "background-color",
+      "example": "bg$surface",
+      "note": "",
+      "anchor": "alias-bg"
+    },
+    {
+      "group": "Borders & Radius",
+      "aliases": [
+        "b"
+      ],
+      "property": "border",
+      "example": "b$2$s$red",
+      "note": "Values are classified by type: width, style, then color. Visible borders need a style.",
+      "anchor": "alias-b"
+    },
+    {
+      "group": "Borders & Radius",
+      "aliases": [
+        "bx",
+        "by"
+      ],
+      "property": "left+right / top+bottom border",
+      "example": "bx$1$d$primary",
+      "note": "",
+      "anchor": "alias-bx"
+    },
+    {
+      "group": "Borders & Radius",
+      "aliases": [
+        "bt",
+        "bb",
+        "bl",
+        "br"
+      ],
+      "property": "border-top / bottom / left / right",
+      "example": "bt$1$s$border",
+      "note": "br is border-right. Use r for border-radius.",
+      "anchor": "alias-bt"
+    },
+    {
+      "group": "Borders & Radius",
+      "aliases": [
+        "bw",
+        "bst",
+        "bc"
+      ],
+      "property": "border-width / border-style / border-color",
+      "example": "bc$primary",
+      "note": "",
+      "anchor": "alias-bw"
+    },
+    {
+      "group": "Borders & Radius",
+      "aliases": [
+        "r"
+      ],
+      "property": "border-radius",
+      "example": "r$12",
+      "note": "r$full becomes 9999px. r$8$8$0$0 accepts four corners.",
+      "anchor": "alias-r"
+    },
+    {
+      "group": "Borders & Radius",
+      "aliases": [
+        "r-tl",
+        "r-tr",
+        "r-br",
+        "r-bl"
+      ],
+      "property": "one border-radius corner",
+      "example": "r-tl$0",
+      "note": "",
+      "anchor": "alias-r-tl"
+    },
+    {
+      "group": "Effects & Interaction",
+      "aliases": [
+        "op"
+      ],
+      "property": "opacity",
+      "example": "op$50",
+      "note": "Integers are percentages: 50 becomes 0.5.",
+      "anchor": "alias-op"
+    },
+    {
+      "group": "Effects & Interaction",
+      "aliases": [
+        "sh"
+      ],
+      "property": "box-shadow",
+      "example": "sh$md",
+      "note": "sm, md, lg and xl map to theme shadow variables.",
+      "anchor": "alias-sh"
+    },
+    {
+      "group": "Effects & Interaction",
+      "aliases": [
+        "tr"
+      ],
+      "property": "transition",
+      "example": "tr$200",
+      "note": "tr$300$inout sets duration and timing.",
+      "anchor": "alias-tr"
+    },
+    {
+      "group": "Effects & Interaction",
+      "aliases": [
+        "cur"
+      ],
+      "property": "cursor",
+      "example": "cur$p",
+      "note": "",
+      "anchor": "alias-cur"
+    },
+    {
+      "group": "Effects & Interaction",
+      "aliases": [
+        "pe"
+      ],
+      "property": "pointer-events",
+      "example": "pe$none",
+      "note": "",
+      "anchor": "alias-pe"
+    },
+    {
+      "group": "Effects & Interaction",
+      "aliases": [
+        "sel"
+      ],
+      "property": "user-select",
+      "example": "sel$none",
+      "note": "",
+      "anchor": "alias-sel"
+    }
+  ],
+  "properties": [
+    {
+      "alias": "accent-color",
+      "property": "accent-color",
+      "example": "accent-color$primary",
+      "category": "Color & Background",
+      "anchor": "property-accent-color",
+      "type": "property"
+    },
+    {
+      "alias": "align-content",
+      "property": "align-content",
+      "example": "align-content$center",
+      "category": "Flex & Grid",
+      "anchor": "property-align-content",
+      "type": "property"
+    },
+    {
+      "alias": "a-i",
+      "property": "align-items",
+      "example": "a-i$center",
+      "category": "Flex & Grid",
+      "anchor": "property-align-items",
+      "type": "map-alias"
+    },
+    {
+      "alias": "align-self",
+      "property": "align-self",
+      "example": "align-self$center",
+      "category": "Flex & Grid",
+      "anchor": "property-align-self",
+      "type": "property"
+    },
+    {
+      "alias": "a-b",
+      "property": "alignment-baseline",
+      "example": "a-b$middle",
+      "category": "Other",
+      "anchor": "property-alignment-baseline",
+      "type": "map-alias"
+    },
+    {
+      "alias": "all",
+      "property": "all",
+      "example": "all$unset",
+      "category": "Layout",
+      "anchor": "property-all",
+      "type": "property"
+    },
+    {
+      "alias": "anchor-name",
+      "property": "anchor-name",
+      "example": "anchor-name$--my-anchor",
+      "category": "Other",
+      "anchor": "property-anchor-name",
+      "type": "property"
+    },
+    {
+      "alias": "anchor-scope",
+      "property": "anchor-scope",
+      "example": "anchor-scope$all",
+      "category": "Other",
+      "anchor": "property-anchor-scope",
+      "type": "property"
+    },
+    {
+      "alias": "animation",
+      "property": "animation",
+      "example": "animation$fade$1s",
+      "category": "Animation & Transform",
+      "anchor": "property-animation",
+      "type": "property"
+    },
+    {
+      "alias": "animation-composition",
+      "property": "animation-composition",
+      "example": "animation-composition$replace",
+      "category": "Animation & Transform",
+      "anchor": "property-animation-composition",
+      "type": "property"
+    },
+    {
+      "alias": "animation-delay",
+      "property": "animation-delay",
+      "example": "animation-delay$100ms",
+      "category": "Animation & Transform",
+      "anchor": "property-animation-delay",
+      "type": "property"
+    },
+    {
+      "alias": "animation-direction",
+      "property": "animation-direction",
+      "example": "animation-direction$alternate",
+      "category": "Animation & Transform",
+      "anchor": "property-animation-direction",
+      "type": "property"
+    },
+    {
+      "alias": "animation-duration",
+      "property": "animation-duration",
+      "example": "animation-duration$1s",
+      "category": "Animation & Transform",
+      "anchor": "property-animation-duration",
+      "type": "property"
+    },
+    {
+      "alias": "a-f-m",
+      "property": "animation-fill-mode",
+      "example": "a-f-m$both",
+      "category": "Animation & Transform",
+      "anchor": "property-animation-fill-mode",
+      "type": "map-alias"
+    },
+    {
+      "alias": "a-i-c",
+      "property": "animation-iteration-count",
+      "example": "a-i-c$infinite",
+      "category": "Animation & Transform",
+      "anchor": "property-animation-iteration-count",
+      "type": "map-alias"
+    },
+    {
+      "alias": "animation-name",
+      "property": "animation-name",
+      "example": "animation-name$fade",
+      "category": "Animation & Transform",
+      "anchor": "property-animation-name",
+      "type": "property"
+    },
+    {
+      "alias": "a-p-s",
+      "property": "animation-play-state",
+      "example": "a-p-s$paused",
+      "category": "Animation & Transform",
+      "anchor": "property-animation-play-state",
+      "type": "map-alias"
+    },
+    {
+      "alias": "animation-range",
+      "property": "animation-range",
+      "example": "animation-range$entry$50pct$exit$50pct",
+      "category": "Animation & Transform",
+      "anchor": "property-animation-range",
+      "type": "property"
+    },
+    {
+      "alias": "a-r-e",
+      "property": "animation-range-end",
+      "example": "a-r-e$exit$50pct",
+      "category": "Animation & Transform",
+      "anchor": "property-animation-range-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "a-r-s",
+      "property": "animation-range-start",
+      "example": "a-r-s$entry$50pct",
+      "category": "Animation & Transform",
+      "anchor": "property-animation-range-start",
+      "type": "map-alias"
+    },
+    {
+      "alias": "a-t",
+      "property": "animation-timeline",
+      "example": "a-t$scroll()",
+      "category": "Animation & Transform",
+      "anchor": "property-animation-timeline",
+      "type": "map-alias"
+    },
+    {
+      "alias": "a-t-f",
+      "property": "animation-timing-function",
+      "example": "a-t-f$ease-in-out",
+      "category": "Animation & Transform",
+      "anchor": "property-animation-timing-function",
+      "type": "map-alias"
+    },
+    {
+      "alias": "appearance",
+      "property": "appearance",
+      "example": "appearance$none",
+      "category": "Other",
+      "anchor": "property-appearance",
+      "type": "property"
+    },
+    {
+      "alias": "aspect-ratio",
+      "property": "aspect-ratio",
+      "example": "aspect-ratio$16$9",
+      "category": "Layout",
+      "anchor": "property-aspect-ratio",
+      "type": "property"
+    },
+    {
+      "alias": "b-f",
+      "property": "backdrop-filter",
+      "example": "b-f$blur(8px)",
+      "category": "Borders & Effects",
+      "anchor": "property-backdrop-filter",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-v",
+      "property": "backface-visibility",
+      "example": "b-v$hidden",
+      "category": "Animation & Transform",
+      "anchor": "property-backface-visibility",
+      "type": "map-alias"
+    },
+    {
+      "alias": "background",
+      "property": "background",
+      "example": "background$primary",
+      "category": "Color & Background",
+      "anchor": "property-background",
+      "type": "property"
+    },
+    {
+      "alias": "background-attachment",
+      "property": "background-attachment",
+      "example": "background-attachment$fixed",
+      "category": "Color & Background",
+      "anchor": "property-background-attachment",
+      "type": "property"
+    },
+    {
+      "alias": "b-b-m",
+      "property": "background-blend-mode",
+      "example": "b-b-m$multiply",
+      "category": "Color & Background",
+      "anchor": "property-background-blend-mode",
+      "type": "map-alias"
+    },
+    {
+      "alias": "background-clip",
+      "property": "background-clip",
+      "example": "background-clip$padding-box",
+      "category": "Color & Background",
+      "anchor": "property-background-clip",
+      "type": "property"
+    },
+    {
+      "alias": "background-color",
+      "property": "background-color",
+      "example": "background-color$primary",
+      "category": "Color & Background",
+      "anchor": "property-background-color",
+      "type": "property"
+    },
+    {
+      "alias": "background-image",
+      "property": "background-image",
+      "example": "background-image$url(https://example.com/a.png)",
+      "category": "Color & Background",
+      "anchor": "property-background-image",
+      "type": "property"
+    },
+    {
+      "alias": "b-o",
+      "property": "background-origin",
+      "example": "b-o$content-box",
+      "category": "Color & Background",
+      "anchor": "property-background-origin",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-p",
+      "property": "background-position",
+      "example": "b-p$16",
+      "category": "Color & Background",
+      "anchor": "property-background-position",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-p-x",
+      "property": "background-position-x",
+      "example": "b-p-x$center",
+      "category": "Color & Background",
+      "anchor": "property-background-position-x",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-p-y",
+      "property": "background-position-y",
+      "example": "b-p-y$center",
+      "category": "Color & Background",
+      "anchor": "property-background-position-y",
+      "type": "map-alias"
+    },
+    {
+      "alias": "background-repeat",
+      "property": "background-repeat",
+      "example": "background-repeat$no-repeat",
+      "category": "Color & Background",
+      "anchor": "property-background-repeat",
+      "type": "property"
+    },
+    {
+      "alias": "b-r-x",
+      "property": "background-repeat-x",
+      "example": "b-r-x$no-repeat",
+      "category": "Color & Background",
+      "anchor": "property-background-repeat-x",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-r-y",
+      "property": "background-repeat-y",
+      "example": "b-r-y$no-repeat",
+      "category": "Color & Background",
+      "anchor": "property-background-repeat-y",
+      "type": "map-alias"
+    },
+    {
+      "alias": "background-size",
+      "property": "background-size",
+      "example": "background-size$16",
+      "category": "Color & Background",
+      "anchor": "property-background-size",
+      "type": "property"
+    },
+    {
+      "alias": "baseline-shift",
+      "property": "baseline-shift",
+      "example": "baseline-shift$sub",
+      "category": "Other",
+      "anchor": "property-baseline-shift",
+      "type": "property"
+    },
+    {
+      "alias": "baseline-source",
+      "property": "baseline-source",
+      "example": "baseline-source$first",
+      "category": "Other",
+      "anchor": "property-baseline-source",
+      "type": "property"
+    },
+    {
+      "alias": "block-size",
+      "property": "block-size",
+      "example": "block-size$16",
+      "category": "Size & Spacing",
+      "anchor": "property-block-size",
+      "type": "property"
+    },
+    {
+      "alias": "border",
+      "property": "border",
+      "example": "border$1px$solid$red",
+      "category": "Borders & Effects",
+      "anchor": "property-border",
+      "type": "property"
+    },
+    {
+      "alias": "border-block",
+      "property": "border-block",
+      "example": "border-block$1px$solid$red",
+      "category": "Borders & Effects",
+      "anchor": "property-border-block",
+      "type": "property"
+    },
+    {
+      "alias": "border-block-color",
+      "property": "border-block-color",
+      "example": "border-block-color$primary",
+      "category": "Borders & Effects",
+      "anchor": "property-border-block-color",
+      "type": "property"
+    },
+    {
+      "alias": "b-b-e",
+      "property": "border-block-end",
+      "example": "b-b-e$1px$solid$red",
+      "category": "Borders & Effects",
+      "anchor": "property-border-block-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-b-e-c",
+      "property": "border-block-end-color",
+      "example": "b-b-e-c$primary",
+      "category": "Borders & Effects",
+      "anchor": "property-border-block-end-color",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-b-e-s",
+      "property": "border-block-end-style",
+      "example": "b-b-e-s$solid",
+      "category": "Borders & Effects",
+      "anchor": "property-border-block-end-style",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-b-e-w",
+      "property": "border-block-end-width",
+      "example": "b-b-e-w$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-block-end-width",
+      "type": "map-alias"
+    },
+    {
+      "alias": "border-block-start",
+      "property": "border-block-start",
+      "example": "border-block-start$1px$solid$red",
+      "category": "Borders & Effects",
+      "anchor": "property-border-block-start",
+      "type": "property"
+    },
+    {
+      "alias": "b-b-s-c",
+      "property": "border-block-start-color",
+      "example": "b-b-s-c$primary",
+      "category": "Borders & Effects",
+      "anchor": "property-border-block-start-color",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-b-s-s",
+      "property": "border-block-start-style",
+      "example": "b-b-s-s$solid",
+      "category": "Borders & Effects",
+      "anchor": "property-border-block-start-style",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-b-s-w",
+      "property": "border-block-start-width",
+      "example": "b-b-s-w$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-block-start-width",
+      "type": "map-alias"
+    },
+    {
+      "alias": "border-block-style",
+      "property": "border-block-style",
+      "example": "border-block-style$solid",
+      "category": "Borders & Effects",
+      "anchor": "property-border-block-style",
+      "type": "property"
+    },
+    {
+      "alias": "border-block-width",
+      "property": "border-block-width",
+      "example": "border-block-width$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-block-width",
+      "type": "property"
+    },
+    {
+      "alias": "border-bottom",
+      "property": "border-bottom",
+      "example": "border-bottom$1px$solid$red",
+      "category": "Borders & Effects",
+      "anchor": "property-border-bottom",
+      "type": "property"
+    },
+    {
+      "alias": "border-bottom-color",
+      "property": "border-bottom-color",
+      "example": "border-bottom-color$primary",
+      "category": "Borders & Effects",
+      "anchor": "property-border-bottom-color",
+      "type": "property"
+    },
+    {
+      "alias": "b-b-l-r",
+      "property": "border-bottom-left-radius",
+      "example": "b-b-l-r$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-bottom-left-radius",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-b-r-r",
+      "property": "border-bottom-right-radius",
+      "example": "b-b-r-r$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-bottom-right-radius",
+      "type": "map-alias"
+    },
+    {
+      "alias": "border-bottom-style",
+      "property": "border-bottom-style",
+      "example": "border-bottom-style$solid",
+      "category": "Borders & Effects",
+      "anchor": "property-border-bottom-style",
+      "type": "property"
+    },
+    {
+      "alias": "border-bottom-width",
+      "property": "border-bottom-width",
+      "example": "border-bottom-width$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-bottom-width",
+      "type": "property"
+    },
+    {
+      "alias": "border-collapse",
+      "property": "border-collapse",
+      "example": "border-collapse$collapse",
+      "category": "Borders & Effects",
+      "anchor": "property-border-collapse",
+      "type": "property"
+    },
+    {
+      "alias": "border-color",
+      "property": "border-color",
+      "example": "border-color$primary",
+      "category": "Borders & Effects",
+      "anchor": "property-border-color",
+      "type": "property"
+    },
+    {
+      "alias": "b-e-e-r",
+      "property": "border-end-end-radius",
+      "example": "b-e-e-r$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-end-end-radius",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-e-s-r",
+      "property": "border-end-start-radius",
+      "example": "b-e-s-r$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-end-start-radius",
+      "type": "map-alias"
+    },
+    {
+      "alias": "border-image",
+      "property": "border-image",
+      "example": "border-image$none",
+      "category": "Borders & Effects",
+      "anchor": "property-border-image",
+      "type": "property"
+    },
+    {
+      "alias": "b-i-o",
+      "property": "border-image-outset",
+      "example": "b-i-o$4px",
+      "category": "Borders & Effects",
+      "anchor": "property-border-image-outset",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-i-r",
+      "property": "border-image-repeat",
+      "example": "b-i-r$round",
+      "category": "Borders & Effects",
+      "anchor": "property-border-image-repeat",
+      "type": "map-alias"
+    },
+    {
+      "alias": "border-image-slice",
+      "property": "border-image-slice",
+      "example": "border-image-slice$30",
+      "category": "Borders & Effects",
+      "anchor": "property-border-image-slice",
+      "type": "property"
+    },
+    {
+      "alias": "border-image-source",
+      "property": "border-image-source",
+      "example": "border-image-source$none",
+      "category": "Borders & Effects",
+      "anchor": "property-border-image-source",
+      "type": "property"
+    },
+    {
+      "alias": "border-image-width",
+      "property": "border-image-width",
+      "example": "border-image-width$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-image-width",
+      "type": "property"
+    },
+    {
+      "alias": "border-inline",
+      "property": "border-inline",
+      "example": "border-inline$1px$solid$red",
+      "category": "Borders & Effects",
+      "anchor": "property-border-inline",
+      "type": "property"
+    },
+    {
+      "alias": "b-i-c",
+      "property": "border-inline-color",
+      "example": "b-i-c$primary",
+      "category": "Borders & Effects",
+      "anchor": "property-border-inline-color",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-i-e",
+      "property": "border-inline-end",
+      "example": "b-i-e$1px$solid$red",
+      "category": "Borders & Effects",
+      "anchor": "property-border-inline-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-i-e-c",
+      "property": "border-inline-end-color",
+      "example": "b-i-e-c$primary",
+      "category": "Borders & Effects",
+      "anchor": "property-border-inline-end-color",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-i-e-s",
+      "property": "border-inline-end-style",
+      "example": "b-i-e-s$solid",
+      "category": "Borders & Effects",
+      "anchor": "property-border-inline-end-style",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-i-e-w",
+      "property": "border-inline-end-width",
+      "example": "b-i-e-w$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-inline-end-width",
+      "type": "map-alias"
+    },
+    {
+      "alias": "border-inline-start",
+      "property": "border-inline-start",
+      "example": "border-inline-start$1px$solid$red",
+      "category": "Borders & Effects",
+      "anchor": "property-border-inline-start",
+      "type": "property"
+    },
+    {
+      "alias": "b-i-s-c",
+      "property": "border-inline-start-color",
+      "example": "b-i-s-c$primary",
+      "category": "Borders & Effects",
+      "anchor": "property-border-inline-start-color",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-i-s-s",
+      "property": "border-inline-start-style",
+      "example": "b-i-s-s$solid",
+      "category": "Borders & Effects",
+      "anchor": "property-border-inline-start-style",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-i-s-w",
+      "property": "border-inline-start-width",
+      "example": "b-i-s-w$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-inline-start-width",
+      "type": "map-alias"
+    },
+    {
+      "alias": "border-inline-style",
+      "property": "border-inline-style",
+      "example": "border-inline-style$solid",
+      "category": "Borders & Effects",
+      "anchor": "property-border-inline-style",
+      "type": "property"
+    },
+    {
+      "alias": "border-inline-width",
+      "property": "border-inline-width",
+      "example": "border-inline-width$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-inline-width",
+      "type": "property"
+    },
+    {
+      "alias": "b-l",
+      "property": "border-left",
+      "example": "b-l$1px$solid$red",
+      "category": "Borders & Effects",
+      "anchor": "property-border-left",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-l-c",
+      "property": "border-left-color",
+      "example": "b-l-c$primary",
+      "category": "Borders & Effects",
+      "anchor": "property-border-left-color",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-l-s",
+      "property": "border-left-style",
+      "example": "b-l-s$solid",
+      "category": "Borders & Effects",
+      "anchor": "property-border-left-style",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-l-w",
+      "property": "border-left-width",
+      "example": "b-l-w$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-left-width",
+      "type": "map-alias"
+    },
+    {
+      "alias": "border-radius",
+      "property": "border-radius",
+      "example": "border-radius$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-radius",
+      "type": "property"
+    },
+    {
+      "alias": "border-right",
+      "property": "border-right",
+      "example": "border-right$1px$solid$red",
+      "category": "Borders & Effects",
+      "anchor": "property-border-right",
+      "type": "property"
+    },
+    {
+      "alias": "b-r-c",
+      "property": "border-right-color",
+      "example": "b-r-c$primary",
+      "category": "Borders & Effects",
+      "anchor": "property-border-right-color",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-r-s",
+      "property": "border-right-style",
+      "example": "b-r-s$solid",
+      "category": "Borders & Effects",
+      "anchor": "property-border-right-style",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-r-w",
+      "property": "border-right-width",
+      "example": "b-r-w$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-right-width",
+      "type": "map-alias"
+    },
+    {
+      "alias": "border-shape",
+      "property": "border-shape",
+      "example": "border-shape$circle(50%)",
+      "category": "Borders & Effects",
+      "anchor": "property-border-shape",
+      "type": "property"
+    },
+    {
+      "alias": "border-spacing",
+      "property": "border-spacing",
+      "example": "border-spacing$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-spacing",
+      "type": "property"
+    },
+    {
+      "alias": "b-s-e-r",
+      "property": "border-start-end-radius",
+      "example": "b-s-e-r$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-start-end-radius",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-s-s-r",
+      "property": "border-start-start-radius",
+      "example": "b-s-s-r$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-start-start-radius",
+      "type": "map-alias"
+    },
+    {
+      "alias": "border-style",
+      "property": "border-style",
+      "example": "border-style$solid",
+      "category": "Borders & Effects",
+      "anchor": "property-border-style",
+      "type": "property"
+    },
+    {
+      "alias": "b-t",
+      "property": "border-top",
+      "example": "b-t$1px$solid$red",
+      "category": "Borders & Effects",
+      "anchor": "property-border-top",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-t-c",
+      "property": "border-top-color",
+      "example": "b-t-c$primary",
+      "category": "Borders & Effects",
+      "anchor": "property-border-top-color",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-t-l-r",
+      "property": "border-top-left-radius",
+      "example": "b-t-l-r$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-top-left-radius",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-t-r-r",
+      "property": "border-top-right-radius",
+      "example": "b-t-r-r$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-top-right-radius",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-t-s",
+      "property": "border-top-style",
+      "example": "b-t-s$solid",
+      "category": "Borders & Effects",
+      "anchor": "property-border-top-style",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-t-w",
+      "property": "border-top-width",
+      "example": "b-t-w$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-top-width",
+      "type": "map-alias"
+    },
+    {
+      "alias": "b-w",
+      "property": "border-width",
+      "example": "b-w$16",
+      "category": "Borders & Effects",
+      "anchor": "property-border-width",
+      "type": "map-alias"
+    },
+    {
+      "alias": "bottom",
+      "property": "bottom",
+      "example": "bottom$16",
+      "category": "Layout",
+      "anchor": "property-bottom",
+      "type": "property"
+    },
+    {
+      "alias": "b-d-b",
+      "property": "box-decoration-break",
+      "example": "b-d-b$clone",
+      "category": "Borders & Effects",
+      "anchor": "property-box-decoration-break",
+      "type": "map-alias"
+    },
+    {
+      "alias": "box-shadow",
+      "property": "box-shadow",
+      "example": "box-shadow$0$0$10px$primary",
+      "category": "Borders & Effects",
+      "anchor": "property-box-shadow",
+      "type": "property"
+    },
+    {
+      "alias": "box-sizing",
+      "property": "box-sizing",
+      "example": "box-sizing$border-box",
+      "category": "Layout",
+      "anchor": "property-box-sizing",
+      "type": "property"
+    },
+    {
+      "alias": "break-after",
+      "property": "break-after",
+      "example": "break-after$page",
+      "category": "Other",
+      "anchor": "property-break-after",
+      "type": "property"
+    },
+    {
+      "alias": "break-before",
+      "property": "break-before",
+      "example": "break-before$page",
+      "category": "Other",
+      "anchor": "property-break-before",
+      "type": "property"
+    },
+    {
+      "alias": "break-inside",
+      "property": "break-inside",
+      "example": "break-inside$avoid",
+      "category": "Other",
+      "anchor": "property-break-inside",
+      "type": "property"
+    },
+    {
+      "alias": "caption-side",
+      "property": "caption-side",
+      "example": "caption-side$bottom",
+      "category": "Other",
+      "anchor": "property-caption-side",
+      "type": "property"
+    },
+    {
+      "alias": "caret",
+      "property": "caret",
+      "example": "caret$primary$bar",
+      "category": "Color & Background",
+      "anchor": "property-caret",
+      "type": "property"
+    },
+    {
+      "alias": "c-a",
+      "property": "caret-animation",
+      "example": "c-a$auto",
+      "category": "Color & Background",
+      "anchor": "property-caret-animation",
+      "type": "map-alias"
+    },
+    {
+      "alias": "caret-color",
+      "property": "caret-color",
+      "example": "caret-color$primary",
+      "category": "Color & Background",
+      "anchor": "property-caret-color",
+      "type": "property"
+    },
+    {
+      "alias": "caret-shape",
+      "property": "caret-shape",
+      "example": "caret-shape$bar",
+      "category": "Color & Background",
+      "anchor": "property-caret-shape",
+      "type": "property"
+    },
+    {
+      "alias": "clear",
+      "property": "clear",
+      "example": "clear$both",
+      "category": "Layout",
+      "anchor": "property-clear",
+      "type": "property"
+    },
+    {
+      "alias": "clip",
+      "property": "clip",
+      "example": "clip$rect(0,0,10px,10px)",
+      "category": "Other",
+      "anchor": "property-clip",
+      "type": "property"
+    },
+    {
+      "alias": "c-p",
+      "property": "clip-path",
+      "example": "c-p$circle(50%)",
+      "category": "Borders & Effects",
+      "anchor": "property-clip-path",
+      "type": "map-alias"
+    },
+    {
+      "alias": "clip-rule",
+      "property": "clip-rule",
+      "example": "clip-rule$evenodd",
+      "category": "Other",
+      "anchor": "property-clip-rule",
+      "type": "property"
+    },
+    {
+      "alias": "color",
+      "property": "color",
+      "example": "color$primary",
+      "category": "Color & Background",
+      "anchor": "property-color",
+      "type": "property"
+    },
+    {
+      "alias": "color-interpolation",
+      "property": "color-interpolation",
+      "example": "color-interpolation$sRGB",
+      "category": "SVG & Masking",
+      "anchor": "property-color-interpolation",
+      "type": "property"
+    },
+    {
+      "alias": "c-i-f",
+      "property": "color-interpolation-filters",
+      "example": "c-i-f$sRGB",
+      "category": "SVG & Masking",
+      "anchor": "property-color-interpolation-filters",
+      "type": "map-alias"
+    },
+    {
+      "alias": "color-scheme",
+      "property": "color-scheme",
+      "example": "color-scheme$dark",
+      "category": "Color & Background",
+      "anchor": "property-color-scheme",
+      "type": "property"
+    },
+    {
+      "alias": "column-count",
+      "property": "column-count",
+      "example": "column-count$2",
+      "category": "Layout",
+      "anchor": "property-column-count",
+      "type": "property"
+    },
+    {
+      "alias": "c-f",
+      "property": "column-fill",
+      "example": "c-f$balance",
+      "category": "Layout",
+      "anchor": "property-column-fill",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-g",
+      "property": "column-gap",
+      "example": "c-g$16",
+      "category": "Flex & Grid",
+      "anchor": "property-column-gap",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-h",
+      "property": "column-height",
+      "example": "c-h$200px",
+      "category": "Layout",
+      "anchor": "property-column-height",
+      "type": "map-alias"
+    },
+    {
+      "alias": "column-rule",
+      "property": "column-rule",
+      "example": "column-rule$1px$solid$red",
+      "category": "Layout",
+      "anchor": "property-column-rule",
+      "type": "property"
+    },
+    {
+      "alias": "c-r-c",
+      "property": "column-rule-color",
+      "example": "c-r-c$primary",
+      "category": "Layout",
+      "anchor": "property-column-rule-color",
+      "type": "map-alias"
+    },
+    {
+      "alias": "column-rule-style",
+      "property": "column-rule-style",
+      "example": "column-rule-style$solid",
+      "category": "Layout",
+      "anchor": "property-column-rule-style",
+      "type": "property"
+    },
+    {
+      "alias": "c-r-w",
+      "property": "column-rule-width",
+      "example": "c-r-w$16",
+      "category": "Layout",
+      "anchor": "property-column-rule-width",
+      "type": "map-alias"
+    },
+    {
+      "alias": "column-span",
+      "property": "column-span",
+      "example": "column-span$all",
+      "category": "Layout",
+      "anchor": "property-column-span",
+      "type": "property"
+    },
+    {
+      "alias": "column-width",
+      "property": "column-width",
+      "example": "column-width$16",
+      "category": "Layout",
+      "anchor": "property-column-width",
+      "type": "property"
+    },
+    {
+      "alias": "column-wrap",
+      "property": "column-wrap",
+      "example": "column-wrap$wrap",
+      "category": "Layout",
+      "anchor": "property-column-wrap",
+      "type": "property"
+    },
+    {
+      "alias": "columns",
+      "property": "columns",
+      "example": "columns$2",
+      "category": "Layout",
+      "anchor": "property-columns",
+      "type": "property"
+    },
+    {
+      "alias": "contain",
+      "property": "contain",
+      "example": "contain$layout",
+      "category": "Layout",
+      "anchor": "property-contain",
+      "type": "property"
+    },
+    {
+      "alias": "c-i-b-s",
+      "property": "contain-intrinsic-block-size",
+      "example": "c-i-b-s$100px",
+      "category": "Layout",
+      "anchor": "property-contain-intrinsic-block-size",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-i-h",
+      "property": "contain-intrinsic-height",
+      "example": "c-i-h$100px",
+      "category": "Layout",
+      "anchor": "property-contain-intrinsic-height",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-i-i-s",
+      "property": "contain-intrinsic-inline-size",
+      "example": "c-i-i-s$100px",
+      "category": "Layout",
+      "anchor": "property-contain-intrinsic-inline-size",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-i-s",
+      "property": "contain-intrinsic-size",
+      "example": "c-i-s$100px",
+      "category": "Layout",
+      "anchor": "property-contain-intrinsic-size",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-i-w",
+      "property": "contain-intrinsic-width",
+      "example": "c-i-w$16",
+      "category": "Layout",
+      "anchor": "property-contain-intrinsic-width",
+      "type": "map-alias"
+    },
+    {
+      "alias": "container",
+      "property": "container",
+      "example": "container$card$inline-size",
+      "category": "Layout",
+      "anchor": "property-container",
+      "type": "property"
+    },
+    {
+      "alias": "c-n",
+      "property": "container-name",
+      "example": "c-n$card",
+      "category": "Layout",
+      "anchor": "property-container-name",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-t",
+      "property": "container-type",
+      "example": "c-t$inline-size",
+      "category": "Layout",
+      "anchor": "property-container-type",
+      "type": "map-alias"
+    },
+    {
+      "alias": "content",
+      "property": "content",
+      "example": "content$'hello'",
+      "category": "Other",
+      "anchor": "property-content",
+      "type": "property"
+    },
+    {
+      "alias": "c-v",
+      "property": "content-visibility",
+      "example": "c-v$auto",
+      "category": "Layout",
+      "anchor": "property-content-visibility",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-b-e-s",
+      "property": "corner-block-end-shape",
+      "example": "c-b-e-s$round",
+      "category": "Other",
+      "anchor": "property-corner-block-end-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-b-s-s",
+      "property": "corner-block-start-shape",
+      "example": "c-b-s-s$round",
+      "category": "Other",
+      "anchor": "property-corner-block-start-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-b-l-s",
+      "property": "corner-bottom-left-shape",
+      "example": "c-b-l-s$round",
+      "category": "Other",
+      "anchor": "property-corner-bottom-left-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-b-r-s",
+      "property": "corner-bottom-right-shape",
+      "example": "c-b-r-s$round",
+      "category": "Other",
+      "anchor": "property-corner-bottom-right-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-b-s",
+      "property": "corner-bottom-shape",
+      "example": "c-b-s$round",
+      "category": "Other",
+      "anchor": "property-corner-bottom-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-e-e-s",
+      "property": "corner-end-end-shape",
+      "example": "c-e-e-s$round",
+      "category": "Other",
+      "anchor": "property-corner-end-end-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-e-s-s",
+      "property": "corner-end-start-shape",
+      "example": "c-e-s-s$round",
+      "category": "Other",
+      "anchor": "property-corner-end-start-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-i-e-s",
+      "property": "corner-inline-end-shape",
+      "example": "c-i-e-s$round",
+      "category": "Other",
+      "anchor": "property-corner-inline-end-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-i-s-s",
+      "property": "corner-inline-start-shape",
+      "example": "c-i-s-s$round",
+      "category": "Other",
+      "anchor": "property-corner-inline-start-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-l-s",
+      "property": "corner-left-shape",
+      "example": "c-l-s$round",
+      "category": "Other",
+      "anchor": "property-corner-left-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "corner-right-shape",
+      "property": "corner-right-shape",
+      "example": "corner-right-shape$round",
+      "category": "Other",
+      "anchor": "property-corner-right-shape",
+      "type": "property"
+    },
+    {
+      "alias": "corner-shape",
+      "property": "corner-shape",
+      "example": "corner-shape$round",
+      "category": "Other",
+      "anchor": "property-corner-shape",
+      "type": "property"
+    },
+    {
+      "alias": "c-s-e-s",
+      "property": "corner-start-end-shape",
+      "example": "c-s-e-s$round",
+      "category": "Other",
+      "anchor": "property-corner-start-end-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-s-s-s",
+      "property": "corner-start-start-shape",
+      "example": "c-s-s-s$round",
+      "category": "Other",
+      "anchor": "property-corner-start-start-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-t-l-s",
+      "property": "corner-top-left-shape",
+      "example": "c-t-l-s$round",
+      "category": "Other",
+      "anchor": "property-corner-top-left-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-t-r-s",
+      "property": "corner-top-right-shape",
+      "example": "c-t-r-s$round",
+      "category": "Other",
+      "anchor": "property-corner-top-right-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "c-t-s",
+      "property": "corner-top-shape",
+      "example": "c-t-s$round",
+      "category": "Other",
+      "anchor": "property-corner-top-shape",
+      "type": "map-alias"
+    },
+    {
+      "alias": "counter-increment",
+      "property": "counter-increment",
+      "example": "counter-increment$item",
+      "category": "Typography",
+      "anchor": "property-counter-increment",
+      "type": "property"
+    },
+    {
+      "alias": "counter-reset",
+      "property": "counter-reset",
+      "example": "counter-reset$item",
+      "category": "Typography",
+      "anchor": "property-counter-reset",
+      "type": "property"
+    },
+    {
+      "alias": "counter-set",
+      "property": "counter-set",
+      "example": "counter-set$item$1",
+      "category": "Typography",
+      "anchor": "property-counter-set",
+      "type": "property"
+    },
+    {
+      "alias": "cursor",
+      "property": "cursor",
+      "example": "cursor$pointer",
+      "category": "Other",
+      "anchor": "property-cursor",
+      "type": "property"
+    },
+    {
+      "alias": "cx",
+      "property": "cx",
+      "example": "cx$16",
+      "category": "SVG & Masking",
+      "anchor": "property-cx",
+      "type": "property"
+    },
+    {
+      "alias": "cy",
+      "property": "cy",
+      "example": "cy$16",
+      "category": "SVG & Masking",
+      "anchor": "property-cy",
+      "type": "property"
+    },
+    {
+      "alias": "d",
+      "property": "d",
+      "example": "svg-d$M0,0L10,10",
+      "category": "SVG & Masking",
+      "anchor": "property-d",
+      "type": "property"
+    },
+    {
+      "alias": "direction",
+      "property": "direction",
+      "example": "direction$ltr",
+      "category": "Layout",
+      "anchor": "property-direction",
+      "type": "property"
+    },
+    {
+      "alias": "display",
+      "property": "display",
+      "example": "display$flex",
+      "category": "Layout",
+      "anchor": "property-display",
+      "type": "property"
+    },
+    {
+      "alias": "d-b",
+      "property": "dominant-baseline",
+      "example": "d-b$middle",
+      "category": "Other",
+      "anchor": "property-dominant-baseline",
+      "type": "map-alias"
+    },
+    {
+      "alias": "d-r-l",
+      "property": "dynamic-range-limit",
+      "example": "d-r-l$standard",
+      "category": "Other",
+      "anchor": "property-dynamic-range-limit",
+      "type": "map-alias"
+    },
+    {
+      "alias": "e-c",
+      "property": "empty-cells",
+      "example": "e-c$hide",
+      "category": "Other",
+      "anchor": "property-empty-cells",
+      "type": "map-alias"
+    },
+    {
+      "alias": "field-sizing",
+      "property": "field-sizing",
+      "example": "field-sizing$content",
+      "category": "Other",
+      "anchor": "property-field-sizing",
+      "type": "property"
+    },
+    {
+      "alias": "fill",
+      "property": "fill",
+      "example": "fill$primary",
+      "category": "Color & Background",
+      "anchor": "property-fill",
+      "type": "property"
+    },
+    {
+      "alias": "fill-opacity",
+      "property": "fill-opacity",
+      "example": "fill-opacity$0.5",
+      "category": "Color & Background",
+      "anchor": "property-fill-opacity",
+      "type": "property"
+    },
+    {
+      "alias": "f-r",
+      "property": "fill-rule",
+      "example": "f-r$evenodd",
+      "category": "Color & Background",
+      "anchor": "property-fill-rule",
+      "type": "map-alias"
+    },
+    {
+      "alias": "filter",
+      "property": "filter",
+      "example": "filter$blur(4px)",
+      "category": "Borders & Effects",
+      "anchor": "property-filter",
+      "type": "property"
+    },
+    {
+      "alias": "flex",
+      "property": "flex",
+      "example": "flex$1",
+      "category": "Flex & Grid",
+      "anchor": "property-flex",
+      "type": "property"
+    },
+    {
+      "alias": "f-b",
+      "property": "flex-basis",
+      "example": "f-b$16",
+      "category": "Flex & Grid",
+      "anchor": "property-flex-basis",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-d",
+      "property": "flex-direction",
+      "example": "f-d$column",
+      "category": "Flex & Grid",
+      "anchor": "property-flex-direction",
+      "type": "map-alias"
+    },
+    {
+      "alias": "flex-flow",
+      "property": "flex-flow",
+      "example": "flex-flow$row$wrap",
+      "category": "Flex & Grid",
+      "anchor": "property-flex-flow",
+      "type": "property"
+    },
+    {
+      "alias": "f-g",
+      "property": "flex-grow",
+      "example": "f-g$1",
+      "category": "Flex & Grid",
+      "anchor": "property-flex-grow",
+      "type": "map-alias"
+    },
+    {
+      "alias": "flex-shrink",
+      "property": "flex-shrink",
+      "example": "flex-shrink$0",
+      "category": "Flex & Grid",
+      "anchor": "property-flex-shrink",
+      "type": "property"
+    },
+    {
+      "alias": "flex-wrap",
+      "property": "flex-wrap",
+      "example": "flex-wrap$wrap",
+      "category": "Flex & Grid",
+      "anchor": "property-flex-wrap",
+      "type": "property"
+    },
+    {
+      "alias": "float",
+      "property": "float",
+      "example": "float$left",
+      "category": "Layout",
+      "anchor": "property-float",
+      "type": "property"
+    },
+    {
+      "alias": "f-c",
+      "property": "flood-color",
+      "example": "f-c$primary",
+      "category": "Color & Background",
+      "anchor": "property-flood-color",
+      "type": "map-alias"
+    },
+    {
+      "alias": "flood-opacity",
+      "property": "flood-opacity",
+      "example": "flood-opacity$0.5",
+      "category": "Other",
+      "anchor": "property-flood-opacity",
+      "type": "property"
+    },
+    {
+      "alias": "font",
+      "property": "font",
+      "example": "font$16px$sans-serif",
+      "category": "Typography",
+      "anchor": "property-font",
+      "type": "property"
+    },
+    {
+      "alias": "font-family",
+      "property": "font-family",
+      "example": "font-family$sans-serif",
+      "category": "Typography",
+      "anchor": "property-font-family",
+      "type": "property"
+    },
+    {
+      "alias": "f-f-s",
+      "property": "font-feature-settings",
+      "example": "f-f-s$'liga'$1",
+      "category": "Typography",
+      "anchor": "property-font-feature-settings",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-k",
+      "property": "font-kerning",
+      "example": "f-k$normal",
+      "category": "Typography",
+      "anchor": "property-font-kerning",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-l-o",
+      "property": "font-language-override",
+      "example": "f-l-o$'ENG'",
+      "category": "Typography",
+      "anchor": "property-font-language-override",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-o-s",
+      "property": "font-optical-sizing",
+      "example": "f-o-s$none",
+      "category": "Typography",
+      "anchor": "property-font-optical-sizing",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-p",
+      "property": "font-palette",
+      "example": "f-p$dark",
+      "category": "Typography",
+      "anchor": "property-font-palette",
+      "type": "map-alias"
+    },
+    {
+      "alias": "font-size",
+      "property": "font-size",
+      "example": "font-size$16",
+      "category": "Typography",
+      "anchor": "property-font-size",
+      "type": "property"
+    },
+    {
+      "alias": "f-s-a",
+      "property": "font-size-adjust",
+      "example": "f-s-a$0.5",
+      "category": "Typography",
+      "anchor": "property-font-size-adjust",
+      "type": "map-alias"
+    },
+    {
+      "alias": "font-stretch",
+      "property": "font-stretch",
+      "example": "font-stretch$condensed",
+      "category": "Typography",
+      "anchor": "property-font-stretch",
+      "type": "property"
+    },
+    {
+      "alias": "font-style",
+      "property": "font-style",
+      "example": "font-style$italic",
+      "category": "Typography",
+      "anchor": "property-font-style",
+      "type": "property"
+    },
+    {
+      "alias": "font-synthesis",
+      "property": "font-synthesis",
+      "example": "font-synthesis$none",
+      "category": "Typography",
+      "anchor": "property-font-synthesis",
+      "type": "property"
+    },
+    {
+      "alias": "f-s-p",
+      "property": "font-synthesis-position",
+      "example": "f-s-p$none",
+      "category": "Typography",
+      "anchor": "property-font-synthesis-position",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-s-s-c",
+      "property": "font-synthesis-small-caps",
+      "example": "f-s-s-c$none",
+      "category": "Typography",
+      "anchor": "property-font-synthesis-small-caps",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-s-s",
+      "property": "font-synthesis-style",
+      "example": "f-s-s$none",
+      "category": "Typography",
+      "anchor": "property-font-synthesis-style",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-s-w",
+      "property": "font-synthesis-weight",
+      "example": "f-s-w$none",
+      "category": "Typography",
+      "anchor": "property-font-synthesis-weight",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-v",
+      "property": "font-variant",
+      "example": "f-v$small-caps",
+      "category": "Typography",
+      "anchor": "property-font-variant",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-v-a",
+      "property": "font-variant-alternates",
+      "example": "f-v-a$historical-forms",
+      "category": "Typography",
+      "anchor": "property-font-variant-alternates",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-v-c",
+      "property": "font-variant-caps",
+      "example": "f-v-c$small-caps",
+      "category": "Typography",
+      "anchor": "property-font-variant-caps",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-v-e-a",
+      "property": "font-variant-east-asian",
+      "example": "f-v-e-a$ruby",
+      "category": "Typography",
+      "anchor": "property-font-variant-east-asian",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-v-e",
+      "property": "font-variant-emoji",
+      "example": "f-v-e$emoji",
+      "category": "Typography",
+      "anchor": "property-font-variant-emoji",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-v-l",
+      "property": "font-variant-ligatures",
+      "example": "f-v-l$none",
+      "category": "Typography",
+      "anchor": "property-font-variant-ligatures",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-v-n",
+      "property": "font-variant-numeric",
+      "example": "f-v-n$tabular-nums",
+      "category": "Typography",
+      "anchor": "property-font-variant-numeric",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-v-p",
+      "property": "font-variant-position",
+      "example": "f-v-p$super",
+      "category": "Typography",
+      "anchor": "property-font-variant-position",
+      "type": "map-alias"
+    },
+    {
+      "alias": "f-v-s",
+      "property": "font-variation-settings",
+      "example": "f-v-s$'wght'$700",
+      "category": "Typography",
+      "anchor": "property-font-variation-settings",
+      "type": "map-alias"
+    },
+    {
+      "alias": "font-weight",
+      "property": "font-weight",
+      "example": "font-weight$bold",
+      "category": "Typography",
+      "anchor": "property-font-weight",
+      "type": "property"
+    },
+    {
+      "alias": "font-width",
+      "property": "font-width",
+      "example": "font-width$16",
+      "category": "Typography",
+      "anchor": "property-font-width",
+      "type": "property"
+    },
+    {
+      "alias": "f-c-a",
+      "property": "forced-color-adjust",
+      "example": "f-c-a$none",
+      "category": "Other",
+      "anchor": "property-forced-color-adjust",
+      "type": "map-alias"
+    },
+    {
+      "alias": "gap",
+      "property": "gap",
+      "example": "gap$16",
+      "category": "Flex & Grid",
+      "anchor": "property-gap",
+      "type": "property"
+    },
+    {
+      "alias": "grid",
+      "property": "grid",
+      "example": "grid$none",
+      "category": "Flex & Grid",
+      "anchor": "property-grid",
+      "type": "property"
+    },
+    {
+      "alias": "g-a",
+      "property": "grid-area",
+      "example": "g-a$1/2/3/4",
+      "category": "Flex & Grid",
+      "anchor": "property-grid-area",
+      "type": "map-alias"
+    },
+    {
+      "alias": "g-a-c",
+      "property": "grid-auto-columns",
+      "example": "g-a-c$1fr",
+      "category": "Flex & Grid",
+      "anchor": "property-grid-auto-columns",
+      "type": "map-alias"
+    },
+    {
+      "alias": "g-a-f",
+      "property": "grid-auto-flow",
+      "example": "g-a-f$row",
+      "category": "Flex & Grid",
+      "anchor": "property-grid-auto-flow",
+      "type": "map-alias"
+    },
+    {
+      "alias": "g-a-r",
+      "property": "grid-auto-rows",
+      "example": "g-a-r$auto",
+      "category": "Flex & Grid",
+      "anchor": "property-grid-auto-rows",
+      "type": "map-alias"
+    },
+    {
+      "alias": "g-c",
+      "property": "grid-column",
+      "example": "g-c$1/3",
+      "category": "Flex & Grid",
+      "anchor": "property-grid-column",
+      "type": "map-alias"
+    },
+    {
+      "alias": "g-c-e",
+      "property": "grid-column-end",
+      "example": "g-c-e$3",
+      "category": "Flex & Grid",
+      "anchor": "property-grid-column-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "g-c-s",
+      "property": "grid-column-start",
+      "example": "g-c-s$1",
+      "category": "Flex & Grid",
+      "anchor": "property-grid-column-start",
+      "type": "map-alias"
+    },
+    {
+      "alias": "g-r",
+      "property": "grid-row",
+      "example": "g-r$1/3",
+      "category": "Flex & Grid",
+      "anchor": "property-grid-row",
+      "type": "map-alias"
+    },
+    {
+      "alias": "g-r-e",
+      "property": "grid-row-end",
+      "example": "g-r-e$3",
+      "category": "Flex & Grid",
+      "anchor": "property-grid-row-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "g-r-s",
+      "property": "grid-row-start",
+      "example": "g-r-s$1",
+      "category": "Flex & Grid",
+      "anchor": "property-grid-row-start",
+      "type": "map-alias"
+    },
+    {
+      "alias": "g-t",
+      "property": "grid-template",
+      "example": "g-t$1fr$/$1fr",
+      "category": "Flex & Grid",
+      "anchor": "property-grid-template",
+      "type": "map-alias"
+    },
+    {
+      "alias": "g-t-a",
+      "property": "grid-template-areas",
+      "example": "g-t-a$none",
+      "category": "Flex & Grid",
+      "anchor": "property-grid-template-areas",
+      "type": "map-alias"
+    },
+    {
+      "alias": "g-t-c",
+      "property": "grid-template-columns",
+      "example": "g-t-c$3",
+      "category": "Flex & Grid",
+      "anchor": "property-grid-template-columns",
+      "type": "map-alias"
+    },
+    {
+      "alias": "g-t-r",
+      "property": "grid-template-rows",
+      "example": "g-t-r$3",
+      "category": "Flex & Grid",
+      "anchor": "property-grid-template-rows",
+      "type": "map-alias"
+    },
+    {
+      "alias": "h-p",
+      "property": "hanging-punctuation",
+      "example": "h-p$first",
+      "category": "Other",
+      "anchor": "property-hanging-punctuation",
+      "type": "map-alias"
+    },
+    {
+      "alias": "height",
+      "property": "height",
+      "example": "height$16",
+      "category": "Size & Spacing",
+      "anchor": "property-height",
+      "type": "property"
+    },
+    {
+      "alias": "h-c",
+      "property": "hyphenate-character",
+      "example": "h-c$'-'",
+      "category": "Other",
+      "anchor": "property-hyphenate-character",
+      "type": "map-alias"
+    },
+    {
+      "alias": "h-l-c",
+      "property": "hyphenate-limit-chars",
+      "example": "h-l-c$5",
+      "category": "Other",
+      "anchor": "property-hyphenate-limit-chars",
+      "type": "map-alias"
+    },
+    {
+      "alias": "hyphens",
+      "property": "hyphens",
+      "example": "hyphens$auto",
+      "category": "Typography",
+      "anchor": "property-hyphens",
+      "type": "property"
+    },
+    {
+      "alias": "i-o",
+      "property": "image-orientation",
+      "example": "i-o$from-image",
+      "category": "Other",
+      "anchor": "property-image-orientation",
+      "type": "map-alias"
+    },
+    {
+      "alias": "image-rendering",
+      "property": "image-rendering",
+      "example": "image-rendering$pixelated",
+      "category": "SVG & Masking",
+      "anchor": "property-image-rendering",
+      "type": "property"
+    },
+    {
+      "alias": "image-resolution",
+      "property": "image-resolution",
+      "example": "image-resolution$2dppx",
+      "category": "Other",
+      "anchor": "property-image-resolution",
+      "type": "property"
+    },
+    {
+      "alias": "i-l",
+      "property": "initial-letter",
+      "example": "i-l$3",
+      "category": "Other",
+      "anchor": "property-initial-letter",
+      "type": "map-alias"
+    },
+    {
+      "alias": "inline-size",
+      "property": "inline-size",
+      "example": "inline-size$16",
+      "category": "Size & Spacing",
+      "anchor": "property-inline-size",
+      "type": "property"
+    },
+    {
+      "alias": "inset",
+      "property": "inset",
+      "example": "inset$16",
+      "category": "Layout",
+      "anchor": "property-inset",
+      "type": "property"
+    },
+    {
+      "alias": "i-b",
+      "property": "inset-block",
+      "example": "i-b$16",
+      "category": "Layout",
+      "anchor": "property-inset-block",
+      "type": "map-alias"
+    },
+    {
+      "alias": "i-b-e",
+      "property": "inset-block-end",
+      "example": "i-b-e$16",
+      "category": "Layout",
+      "anchor": "property-inset-block-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "i-b-s",
+      "property": "inset-block-start",
+      "example": "i-b-s$16",
+      "category": "Layout",
+      "anchor": "property-inset-block-start",
+      "type": "map-alias"
+    },
+    {
+      "alias": "i-i",
+      "property": "inset-inline",
+      "example": "i-i$16",
+      "category": "Layout",
+      "anchor": "property-inset-inline",
+      "type": "map-alias"
+    },
+    {
+      "alias": "i-i-e",
+      "property": "inset-inline-end",
+      "example": "i-i-e$16",
+      "category": "Layout",
+      "anchor": "property-inset-inline-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "i-i-s",
+      "property": "inset-inline-start",
+      "example": "i-i-s$16",
+      "category": "Layout",
+      "anchor": "property-inset-inline-start",
+      "type": "map-alias"
+    },
+    {
+      "alias": "interactivity",
+      "property": "interactivity",
+      "example": "interactivity$inert",
+      "category": "Other",
+      "anchor": "property-interactivity",
+      "type": "property"
+    },
+    {
+      "alias": "i-d",
+      "property": "interest-delay",
+      "example": "i-d$200ms",
+      "category": "Other",
+      "anchor": "property-interest-delay",
+      "type": "map-alias"
+    },
+    {
+      "alias": "i-d-e",
+      "property": "interest-delay-end",
+      "example": "i-d-e$200ms",
+      "category": "Other",
+      "anchor": "property-interest-delay-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "i-d-s",
+      "property": "interest-delay-start",
+      "example": "i-d-s$200ms",
+      "category": "Other",
+      "anchor": "property-interest-delay-start",
+      "type": "map-alias"
+    },
+    {
+      "alias": "interpolate-size",
+      "property": "interpolate-size",
+      "example": "interpolate-size$allow-keywords",
+      "category": "Other",
+      "anchor": "property-interpolate-size",
+      "type": "property"
+    },
+    {
+      "alias": "isolation",
+      "property": "isolation",
+      "example": "isolation$isolate",
+      "category": "Borders & Effects",
+      "anchor": "property-isolation",
+      "type": "property"
+    },
+    {
+      "alias": "j-c",
+      "property": "justify-content",
+      "example": "j-c$center",
+      "category": "Flex & Grid",
+      "anchor": "property-justify-content",
+      "type": "map-alias"
+    },
+    {
+      "alias": "j-i",
+      "property": "justify-items",
+      "example": "j-i$center",
+      "category": "Flex & Grid",
+      "anchor": "property-justify-items",
+      "type": "map-alias"
+    },
+    {
+      "alias": "j-s",
+      "property": "justify-self",
+      "example": "j-s$center",
+      "category": "Flex & Grid",
+      "anchor": "property-justify-self",
+      "type": "map-alias"
+    },
+    {
+      "alias": "l",
+      "property": "left",
+      "example": "l$16",
+      "category": "Layout",
+      "anchor": "property-left",
+      "type": "map-alias"
+    },
+    {
+      "alias": "letter-spacing",
+      "property": "letter-spacing",
+      "example": "letter-spacing$16",
+      "category": "Typography",
+      "anchor": "property-letter-spacing",
+      "type": "property"
+    },
+    {
+      "alias": "lighting-color",
+      "property": "lighting-color",
+      "example": "lighting-color$primary",
+      "category": "Color & Background",
+      "anchor": "property-lighting-color",
+      "type": "property"
+    },
+    {
+      "alias": "l-b",
+      "property": "line-break",
+      "example": "l-b$strict",
+      "category": "Other",
+      "anchor": "property-line-break",
+      "type": "map-alias"
+    },
+    {
+      "alias": "line-clamp",
+      "property": "line-clamp",
+      "example": "line-clamp$2",
+      "category": "Other",
+      "anchor": "property-line-clamp",
+      "type": "property"
+    },
+    {
+      "alias": "l-h",
+      "property": "line-height",
+      "example": "l-h$1.5",
+      "category": "Typography",
+      "anchor": "property-line-height",
+      "type": "map-alias"
+    },
+    {
+      "alias": "l-h-s",
+      "property": "line-height-step",
+      "example": "l-h-s$24px",
+      "category": "Typography",
+      "anchor": "property-line-height-step",
+      "type": "map-alias"
+    },
+    {
+      "alias": "list-style",
+      "property": "list-style",
+      "example": "list-style$none",
+      "category": "Typography",
+      "anchor": "property-list-style",
+      "type": "property"
+    },
+    {
+      "alias": "l-s-i",
+      "property": "list-style-image",
+      "example": "l-s-i$url(https://example.com/a.png)",
+      "category": "Typography",
+      "anchor": "property-list-style-image",
+      "type": "map-alias"
+    },
+    {
+      "alias": "l-s-p",
+      "property": "list-style-position",
+      "example": "l-s-p$inside",
+      "category": "Typography",
+      "anchor": "property-list-style-position",
+      "type": "map-alias"
+    },
+    {
+      "alias": "l-s-t",
+      "property": "list-style-type",
+      "example": "l-s-t$none",
+      "category": "Typography",
+      "anchor": "property-list-style-type",
+      "type": "map-alias"
+    },
+    {
+      "alias": "margin",
+      "property": "margin",
+      "example": "margin$16",
+      "category": "Size & Spacing",
+      "anchor": "property-margin",
+      "type": "property"
+    },
+    {
+      "alias": "margin-block",
+      "property": "margin-block",
+      "example": "margin-block$16",
+      "category": "Size & Spacing",
+      "anchor": "property-margin-block",
+      "type": "property"
+    },
+    {
+      "alias": "m-b-e",
+      "property": "margin-block-end",
+      "example": "m-b-e$16",
+      "category": "Size & Spacing",
+      "anchor": "property-margin-block-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "margin-block-start",
+      "property": "margin-block-start",
+      "example": "margin-block-start$16",
+      "category": "Size & Spacing",
+      "anchor": "property-margin-block-start",
+      "type": "property"
+    },
+    {
+      "alias": "margin-bottom",
+      "property": "margin-bottom",
+      "example": "margin-bottom$16",
+      "category": "Size & Spacing",
+      "anchor": "property-margin-bottom",
+      "type": "property"
+    },
+    {
+      "alias": "margin-inline",
+      "property": "margin-inline",
+      "example": "margin-inline$16",
+      "category": "Size & Spacing",
+      "anchor": "property-margin-inline",
+      "type": "property"
+    },
+    {
+      "alias": "m-i-e",
+      "property": "margin-inline-end",
+      "example": "m-i-e$16",
+      "category": "Size & Spacing",
+      "anchor": "property-margin-inline-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "margin-inline-start",
+      "property": "margin-inline-start",
+      "example": "margin-inline-start$16",
+      "category": "Size & Spacing",
+      "anchor": "property-margin-inline-start",
+      "type": "property"
+    },
+    {
+      "alias": "m-l",
+      "property": "margin-left",
+      "example": "m-l$16",
+      "category": "Size & Spacing",
+      "anchor": "property-margin-left",
+      "type": "map-alias"
+    },
+    {
+      "alias": "margin-right",
+      "property": "margin-right",
+      "example": "margin-right$16",
+      "category": "Size & Spacing",
+      "anchor": "property-margin-right",
+      "type": "property"
+    },
+    {
+      "alias": "margin-top",
+      "property": "margin-top",
+      "example": "margin-top$16",
+      "category": "Size & Spacing",
+      "anchor": "property-margin-top",
+      "type": "property"
+    },
+    {
+      "alias": "margin-trim",
+      "property": "margin-trim",
+      "example": "margin-trim$16",
+      "category": "Size & Spacing",
+      "anchor": "property-margin-trim",
+      "type": "property"
+    },
+    {
+      "alias": "marker",
+      "property": "marker",
+      "example": "marker$url(#arrow)",
+      "category": "SVG & Masking",
+      "anchor": "property-marker",
+      "type": "property"
+    },
+    {
+      "alias": "m-e",
+      "property": "marker-end",
+      "example": "m-e$url(#arrow)",
+      "category": "SVG & Masking",
+      "anchor": "property-marker-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "marker-mid",
+      "property": "marker-mid",
+      "example": "marker-mid$url(#arrow)",
+      "category": "SVG & Masking",
+      "anchor": "property-marker-mid",
+      "type": "property"
+    },
+    {
+      "alias": "marker-start",
+      "property": "marker-start",
+      "example": "marker-start$url(#arrow)",
+      "category": "SVG & Masking",
+      "anchor": "property-marker-start",
+      "type": "property"
+    },
+    {
+      "alias": "mask",
+      "property": "mask",
+      "example": "mask$url(https://example.com/mask.svg)",
+      "category": "Borders & Effects",
+      "anchor": "property-mask",
+      "type": "property"
+    },
+    {
+      "alias": "mask-border",
+      "property": "mask-border",
+      "example": "mask-border$url(https://example.com/mask.png)$30",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-border",
+      "type": "property"
+    },
+    {
+      "alias": "mask-border-mode",
+      "property": "mask-border-mode",
+      "example": "mask-border-mode$luminance",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-border-mode",
+      "type": "property"
+    },
+    {
+      "alias": "m-b-o",
+      "property": "mask-border-outset",
+      "example": "m-b-o$4px",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-border-outset",
+      "type": "map-alias"
+    },
+    {
+      "alias": "m-b-r",
+      "property": "mask-border-repeat",
+      "example": "m-b-r$round",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-border-repeat",
+      "type": "map-alias"
+    },
+    {
+      "alias": "mask-border-slice",
+      "property": "mask-border-slice",
+      "example": "mask-border-slice$30",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-border-slice",
+      "type": "property"
+    },
+    {
+      "alias": "mask-border-source",
+      "property": "mask-border-source",
+      "example": "mask-border-source$url(https://example.com/mask.png)",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-border-source",
+      "type": "property"
+    },
+    {
+      "alias": "m-b-w",
+      "property": "mask-border-width",
+      "example": "m-b-w$16",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-border-width",
+      "type": "map-alias"
+    },
+    {
+      "alias": "mask-clip",
+      "property": "mask-clip",
+      "example": "mask-clip$border-box",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-clip",
+      "type": "property"
+    },
+    {
+      "alias": "mask-composite",
+      "property": "mask-composite",
+      "example": "mask-composite$intersect",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-composite",
+      "type": "property"
+    },
+    {
+      "alias": "mask-image",
+      "property": "mask-image",
+      "example": "mask-image$url(https://example.com/a.png)",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-image",
+      "type": "property"
+    },
+    {
+      "alias": "mask-mode",
+      "property": "mask-mode",
+      "example": "mask-mode$luminance",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-mode",
+      "type": "property"
+    },
+    {
+      "alias": "m-o",
+      "property": "mask-origin",
+      "example": "m-o$content-box",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-origin",
+      "type": "map-alias"
+    },
+    {
+      "alias": "m-p",
+      "property": "mask-position",
+      "example": "m-p$16",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-position",
+      "type": "map-alias"
+    },
+    {
+      "alias": "mask-repeat",
+      "property": "mask-repeat",
+      "example": "mask-repeat$no-repeat",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-repeat",
+      "type": "property"
+    },
+    {
+      "alias": "mask-size",
+      "property": "mask-size",
+      "example": "mask-size$16",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-size",
+      "type": "property"
+    },
+    {
+      "alias": "mask-type",
+      "property": "mask-type",
+      "example": "mask-type$luminance",
+      "category": "Borders & Effects",
+      "anchor": "property-mask-type",
+      "type": "property"
+    },
+    {
+      "alias": "m-d",
+      "property": "math-depth",
+      "example": "m-d$2",
+      "category": "Other",
+      "anchor": "property-math-depth",
+      "type": "map-alias"
+    },
+    {
+      "alias": "math-shift",
+      "property": "math-shift",
+      "example": "math-shift$compact",
+      "category": "Other",
+      "anchor": "property-math-shift",
+      "type": "property"
+    },
+    {
+      "alias": "math-style",
+      "property": "math-style",
+      "example": "math-style$compact",
+      "category": "Other",
+      "anchor": "property-math-style",
+      "type": "property"
+    },
+    {
+      "alias": "max-block-size",
+      "property": "max-block-size",
+      "example": "max-block-size$16",
+      "category": "Size & Spacing",
+      "anchor": "property-max-block-size",
+      "type": "property"
+    },
+    {
+      "alias": "max-height",
+      "property": "max-height",
+      "example": "max-height$16",
+      "category": "Size & Spacing",
+      "anchor": "property-max-height",
+      "type": "property"
+    },
+    {
+      "alias": "max-inline-size",
+      "property": "max-inline-size",
+      "example": "max-inline-size$16",
+      "category": "Size & Spacing",
+      "anchor": "property-max-inline-size",
+      "type": "property"
+    },
+    {
+      "alias": "max-width",
+      "property": "max-width",
+      "example": "max-width$16",
+      "category": "Size & Spacing",
+      "anchor": "property-max-width",
+      "type": "property"
+    },
+    {
+      "alias": "min-block-size",
+      "property": "min-block-size",
+      "example": "min-block-size$16",
+      "category": "Size & Spacing",
+      "anchor": "property-min-block-size",
+      "type": "property"
+    },
+    {
+      "alias": "min-height",
+      "property": "min-height",
+      "example": "min-height$16",
+      "category": "Size & Spacing",
+      "anchor": "property-min-height",
+      "type": "property"
+    },
+    {
+      "alias": "min-inline-size",
+      "property": "min-inline-size",
+      "example": "min-inline-size$16",
+      "category": "Size & Spacing",
+      "anchor": "property-min-inline-size",
+      "type": "property"
+    },
+    {
+      "alias": "min-width",
+      "property": "min-width",
+      "example": "min-width$16",
+      "category": "Size & Spacing",
+      "anchor": "property-min-width",
+      "type": "property"
+    },
+    {
+      "alias": "mix-blend-mode",
+      "property": "mix-blend-mode",
+      "example": "mix-blend-mode$multiply",
+      "category": "Borders & Effects",
+      "anchor": "property-mix-blend-mode",
+      "type": "property"
+    },
+    {
+      "alias": "o-f",
+      "property": "object-fit",
+      "example": "o-f$cover",
+      "category": "Layout",
+      "anchor": "property-object-fit",
+      "type": "map-alias"
+    },
+    {
+      "alias": "object-position",
+      "property": "object-position",
+      "example": "object-position$16",
+      "category": "Layout",
+      "anchor": "property-object-position",
+      "type": "property"
+    },
+    {
+      "alias": "o-v-b",
+      "property": "object-view-box",
+      "example": "o-v-b$inset(10%)",
+      "category": "Layout",
+      "anchor": "property-object-view-box",
+      "type": "map-alias"
+    },
+    {
+      "alias": "offset",
+      "property": "offset",
+      "example": "offset$10px",
+      "category": "Animation & Transform",
+      "anchor": "property-offset",
+      "type": "property"
+    },
+    {
+      "alias": "offset-anchor",
+      "property": "offset-anchor",
+      "example": "offset-anchor$16",
+      "category": "Animation & Transform",
+      "anchor": "property-offset-anchor",
+      "type": "property"
+    },
+    {
+      "alias": "o-d",
+      "property": "offset-distance",
+      "example": "o-d$16",
+      "category": "Animation & Transform",
+      "anchor": "property-offset-distance",
+      "type": "map-alias"
+    },
+    {
+      "alias": "offset-path",
+      "property": "offset-path",
+      "example": "offset-path$circle(50%)",
+      "category": "Animation & Transform",
+      "anchor": "property-offset-path",
+      "type": "property"
+    },
+    {
+      "alias": "offset-position",
+      "property": "offset-position",
+      "example": "offset-position$16",
+      "category": "Animation & Transform",
+      "anchor": "property-offset-position",
+      "type": "property"
+    },
+    {
+      "alias": "o-r",
+      "property": "offset-rotate",
+      "example": "o-r$45deg",
+      "category": "Animation & Transform",
+      "anchor": "property-offset-rotate",
+      "type": "map-alias"
+    },
+    {
+      "alias": "opacity",
+      "property": "opacity",
+      "example": "opacity$50",
+      "category": "Borders & Effects",
+      "anchor": "property-opacity",
+      "type": "property"
+    },
+    {
+      "alias": "order",
+      "property": "order",
+      "example": "order$2",
+      "category": "Flex & Grid",
+      "anchor": "property-order",
+      "type": "property"
+    },
+    {
+      "alias": "orphans",
+      "property": "orphans",
+      "example": "orphans$2",
+      "category": "Typography",
+      "anchor": "property-orphans",
+      "type": "property"
+    },
+    {
+      "alias": "outline",
+      "property": "outline",
+      "example": "outline$1px$solid$red",
+      "category": "Borders & Effects",
+      "anchor": "property-outline",
+      "type": "property"
+    },
+    {
+      "alias": "o-c",
+      "property": "outline-color",
+      "example": "o-c$primary",
+      "category": "Borders & Effects",
+      "anchor": "property-outline-color",
+      "type": "map-alias"
+    },
+    {
+      "alias": "o-o",
+      "property": "outline-offset",
+      "example": "o-o$16",
+      "category": "Borders & Effects",
+      "anchor": "property-outline-offset",
+      "type": "map-alias"
+    },
+    {
+      "alias": "o-s",
+      "property": "outline-style",
+      "example": "o-s$solid",
+      "category": "Borders & Effects",
+      "anchor": "property-outline-style",
+      "type": "map-alias"
+    },
+    {
+      "alias": "outline-width",
+      "property": "outline-width",
+      "example": "outline-width$16",
+      "category": "Borders & Effects",
+      "anchor": "property-outline-width",
+      "type": "property"
+    },
+    {
+      "alias": "overflow",
+      "property": "overflow",
+      "example": "overflow$hidden",
+      "category": "Layout",
+      "anchor": "property-overflow",
+      "type": "property"
+    },
+    {
+      "alias": "overflow-anchor",
+      "property": "overflow-anchor",
+      "example": "overflow-anchor$none",
+      "category": "Layout",
+      "anchor": "property-overflow-anchor",
+      "type": "property"
+    },
+    {
+      "alias": "overflow-block",
+      "property": "overflow-block",
+      "example": "overflow-block$auto",
+      "category": "Layout",
+      "anchor": "property-overflow-block",
+      "type": "property"
+    },
+    {
+      "alias": "o-c-m",
+      "property": "overflow-clip-margin",
+      "example": "o-c-m$10px",
+      "category": "Layout",
+      "anchor": "property-overflow-clip-margin",
+      "type": "map-alias"
+    },
+    {
+      "alias": "o-i",
+      "property": "overflow-inline",
+      "example": "o-i$auto",
+      "category": "Layout",
+      "anchor": "property-overflow-inline",
+      "type": "map-alias"
+    },
+    {
+      "alias": "overflow-wrap",
+      "property": "overflow-wrap",
+      "example": "overflow-wrap$break-word",
+      "category": "Typography",
+      "anchor": "property-overflow-wrap",
+      "type": "property"
+    },
+    {
+      "alias": "o-x",
+      "property": "overflow-x",
+      "example": "o-x$hidden",
+      "category": "Layout",
+      "anchor": "property-overflow-x",
+      "type": "map-alias"
+    },
+    {
+      "alias": "o-y",
+      "property": "overflow-y",
+      "example": "o-y$auto",
+      "category": "Layout",
+      "anchor": "property-overflow-y",
+      "type": "map-alias"
+    },
+    {
+      "alias": "overscroll-behavior",
+      "property": "overscroll-behavior",
+      "example": "overscroll-behavior$contain",
+      "category": "Other",
+      "anchor": "property-overscroll-behavior",
+      "type": "property"
+    },
+    {
+      "alias": "o-b-b",
+      "property": "overscroll-behavior-block",
+      "example": "o-b-b$contain",
+      "category": "Other",
+      "anchor": "property-overscroll-behavior-block",
+      "type": "map-alias"
+    },
+    {
+      "alias": "o-b-i",
+      "property": "overscroll-behavior-inline",
+      "example": "o-b-i$contain",
+      "category": "Other",
+      "anchor": "property-overscroll-behavior-inline",
+      "type": "map-alias"
+    },
+    {
+      "alias": "o-b-x",
+      "property": "overscroll-behavior-x",
+      "example": "o-b-x$contain",
+      "category": "Other",
+      "anchor": "property-overscroll-behavior-x",
+      "type": "map-alias"
+    },
+    {
+      "alias": "o-b-y",
+      "property": "overscroll-behavior-y",
+      "example": "o-b-y$contain",
+      "category": "Other",
+      "anchor": "property-overscroll-behavior-y",
+      "type": "map-alias"
+    },
+    {
+      "alias": "padding",
+      "property": "padding",
+      "example": "padding$16",
+      "category": "Size & Spacing",
+      "anchor": "property-padding",
+      "type": "property"
+    },
+    {
+      "alias": "padding-block",
+      "property": "padding-block",
+      "example": "padding-block$16",
+      "category": "Size & Spacing",
+      "anchor": "property-padding-block",
+      "type": "property"
+    },
+    {
+      "alias": "p-b-e",
+      "property": "padding-block-end",
+      "example": "p-b-e$16",
+      "category": "Size & Spacing",
+      "anchor": "property-padding-block-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "p-b-s",
+      "property": "padding-block-start",
+      "example": "p-b-s$16",
+      "category": "Size & Spacing",
+      "anchor": "property-padding-block-start",
+      "type": "map-alias"
+    },
+    {
+      "alias": "padding-bottom",
+      "property": "padding-bottom",
+      "example": "padding-bottom$16",
+      "category": "Size & Spacing",
+      "anchor": "property-padding-bottom",
+      "type": "property"
+    },
+    {
+      "alias": "padding-inline",
+      "property": "padding-inline",
+      "example": "padding-inline$16",
+      "category": "Size & Spacing",
+      "anchor": "property-padding-inline",
+      "type": "property"
+    },
+    {
+      "alias": "p-i-e",
+      "property": "padding-inline-end",
+      "example": "p-i-e$16",
+      "category": "Size & Spacing",
+      "anchor": "property-padding-inline-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "p-i-s",
+      "property": "padding-inline-start",
+      "example": "p-i-s$16",
+      "category": "Size & Spacing",
+      "anchor": "property-padding-inline-start",
+      "type": "map-alias"
+    },
+    {
+      "alias": "p-l",
+      "property": "padding-left",
+      "example": "p-l$16",
+      "category": "Size & Spacing",
+      "anchor": "property-padding-left",
+      "type": "map-alias"
+    },
+    {
+      "alias": "p-r",
+      "property": "padding-right",
+      "example": "p-r$16",
+      "category": "Size & Spacing",
+      "anchor": "property-padding-right",
+      "type": "map-alias"
+    },
+    {
+      "alias": "padding-top",
+      "property": "padding-top",
+      "example": "padding-top$16",
+      "category": "Size & Spacing",
+      "anchor": "property-padding-top",
+      "type": "property"
+    },
+    {
+      "alias": "page",
+      "property": "page",
+      "example": "page$auto",
+      "category": "Other",
+      "anchor": "property-page",
+      "type": "property"
+    },
+    {
+      "alias": "p-b-a",
+      "property": "page-break-after",
+      "example": "p-b-a$always",
+      "category": "Other",
+      "anchor": "property-page-break-after",
+      "type": "map-alias"
+    },
+    {
+      "alias": "p-b-b",
+      "property": "page-break-before",
+      "example": "p-b-b$always",
+      "category": "Other",
+      "anchor": "property-page-break-before",
+      "type": "map-alias"
+    },
+    {
+      "alias": "p-b-i",
+      "property": "page-break-inside",
+      "example": "p-b-i$avoid",
+      "category": "Other",
+      "anchor": "property-page-break-inside",
+      "type": "map-alias"
+    },
+    {
+      "alias": "paint-order",
+      "property": "paint-order",
+      "example": "paint-order$stroke",
+      "category": "SVG & Masking",
+      "anchor": "property-paint-order",
+      "type": "property"
+    },
+    {
+      "alias": "perspective",
+      "property": "perspective",
+      "example": "perspective$16",
+      "category": "Animation & Transform",
+      "anchor": "property-perspective",
+      "type": "property"
+    },
+    {
+      "alias": "perspective-origin",
+      "property": "perspective-origin",
+      "example": "perspective-origin$16",
+      "category": "Animation & Transform",
+      "anchor": "property-perspective-origin",
+      "type": "property"
+    },
+    {
+      "alias": "p-c",
+      "property": "place-content",
+      "example": "p-c$center",
+      "category": "Flex & Grid",
+      "anchor": "property-place-content",
+      "type": "map-alias"
+    },
+    {
+      "alias": "place-items",
+      "property": "place-items",
+      "example": "place-items$center",
+      "category": "Flex & Grid",
+      "anchor": "property-place-items",
+      "type": "property"
+    },
+    {
+      "alias": "p-s",
+      "property": "place-self",
+      "example": "p-s$center",
+      "category": "Flex & Grid",
+      "anchor": "property-place-self",
+      "type": "map-alias"
+    },
+    {
+      "alias": "p-e",
+      "property": "pointer-events",
+      "example": "p-e$none",
+      "category": "Other",
+      "anchor": "property-pointer-events",
+      "type": "map-alias"
+    },
+    {
+      "alias": "position",
+      "property": "position",
+      "example": "position$absolute",
+      "category": "Layout",
+      "anchor": "property-position",
+      "type": "property"
+    },
+    {
+      "alias": "position-anchor",
+      "property": "position-anchor",
+      "example": "position-anchor$--my-anchor",
+      "category": "Layout",
+      "anchor": "property-position-anchor",
+      "type": "property"
+    },
+    {
+      "alias": "position-area",
+      "property": "position-area",
+      "example": "position-area$top",
+      "category": "Layout",
+      "anchor": "property-position-area",
+      "type": "property"
+    },
+    {
+      "alias": "position-try",
+      "property": "position-try",
+      "example": "position-try$--my-fallback",
+      "category": "Layout",
+      "anchor": "property-position-try",
+      "type": "property"
+    },
+    {
+      "alias": "p-t-f",
+      "property": "position-try-fallbacks",
+      "example": "p-t-f$flip-block",
+      "category": "Layout",
+      "anchor": "property-position-try-fallbacks",
+      "type": "map-alias"
+    },
+    {
+      "alias": "p-t-o",
+      "property": "position-try-order",
+      "example": "p-t-o$most-height",
+      "category": "Layout",
+      "anchor": "property-position-try-order",
+      "type": "map-alias"
+    },
+    {
+      "alias": "p-v",
+      "property": "position-visibility",
+      "example": "p-v$anchors-visible",
+      "category": "Layout",
+      "anchor": "property-position-visibility",
+      "type": "map-alias"
+    },
+    {
+      "alias": "p-c-a",
+      "property": "print-color-adjust",
+      "example": "p-c-a$exact",
+      "category": "Other",
+      "anchor": "property-print-color-adjust",
+      "type": "map-alias"
+    },
+    {
+      "alias": "q",
+      "property": "quotes",
+      "example": "q$none",
+      "category": "Typography",
+      "anchor": "property-quotes",
+      "type": "map-alias"
+    },
+    {
+      "alias": "r",
+      "property": "r",
+      "example": "svg-r$10",
+      "category": "SVG & Masking",
+      "anchor": "property-r",
+      "type": "property"
+    },
+    {
+      "alias": "r-f",
+      "property": "reading-flow",
+      "example": "r-f$flex-visual",
+      "category": "Other",
+      "anchor": "property-reading-flow",
+      "type": "map-alias"
+    },
+    {
+      "alias": "r-o",
+      "property": "reading-order",
+      "example": "r-o$1",
+      "category": "Other",
+      "anchor": "property-reading-order",
+      "type": "map-alias"
+    },
+    {
+      "alias": "resize",
+      "property": "resize",
+      "example": "resize$both",
+      "category": "Layout",
+      "anchor": "property-resize",
+      "type": "property"
+    },
+    {
+      "alias": "right",
+      "property": "right",
+      "example": "right$16",
+      "category": "Layout",
+      "anchor": "property-right",
+      "type": "property"
+    },
+    {
+      "alias": "rotate",
+      "property": "rotate",
+      "example": "rotate$45deg",
+      "category": "Animation & Transform",
+      "anchor": "property-rotate",
+      "type": "property"
+    },
+    {
+      "alias": "r-g",
+      "property": "row-gap",
+      "example": "r-g$16",
+      "category": "Flex & Grid",
+      "anchor": "property-row-gap",
+      "type": "map-alias"
+    },
+    {
+      "alias": "r-a",
+      "property": "ruby-align",
+      "example": "r-a$center",
+      "category": "Typography",
+      "anchor": "property-ruby-align",
+      "type": "map-alias"
+    },
+    {
+      "alias": "r-p",
+      "property": "ruby-position",
+      "example": "r-p$over",
+      "category": "Typography",
+      "anchor": "property-ruby-position",
+      "type": "map-alias"
+    },
+    {
+      "alias": "scale",
+      "property": "scale",
+      "example": "scale$1.05",
+      "category": "Animation & Transform",
+      "anchor": "property-scale",
+      "type": "property"
+    },
+    {
+      "alias": "s-b",
+      "property": "scroll-behavior",
+      "example": "s-b$smooth",
+      "category": "Animation & Transform",
+      "anchor": "property-scroll-behavior",
+      "type": "map-alias"
+    },
+    {
+      "alias": "scroll-initial-target",
+      "property": "scroll-initial-target",
+      "example": "scroll-initial-target$nearest",
+      "category": "Other",
+      "anchor": "property-scroll-initial-target",
+      "type": "property"
+    },
+    {
+      "alias": "scroll-margin",
+      "property": "scroll-margin",
+      "example": "scroll-margin$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-margin",
+      "type": "property"
+    },
+    {
+      "alias": "scroll-margin-block",
+      "property": "scroll-margin-block",
+      "example": "scroll-margin-block$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-margin-block",
+      "type": "property"
+    },
+    {
+      "alias": "s-m-b-e",
+      "property": "scroll-margin-block-end",
+      "example": "s-m-b-e$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-margin-block-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-m-b-s",
+      "property": "scroll-margin-block-start",
+      "example": "s-m-b-s$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-margin-block-start",
+      "type": "map-alias"
+    },
+    {
+      "alias": "scroll-margin-bottom",
+      "property": "scroll-margin-bottom",
+      "example": "scroll-margin-bottom$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-margin-bottom",
+      "type": "property"
+    },
+    {
+      "alias": "s-m-i",
+      "property": "scroll-margin-inline",
+      "example": "s-m-i$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-margin-inline",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-m-i-e",
+      "property": "scroll-margin-inline-end",
+      "example": "s-m-i-e$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-margin-inline-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-m-i-s",
+      "property": "scroll-margin-inline-start",
+      "example": "s-m-i-s$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-margin-inline-start",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-m-l",
+      "property": "scroll-margin-left",
+      "example": "s-m-l$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-margin-left",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-m-r",
+      "property": "scroll-margin-right",
+      "example": "s-m-r$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-margin-right",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-m-t",
+      "property": "scroll-margin-top",
+      "example": "s-m-t$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-margin-top",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-p",
+      "property": "scroll-padding",
+      "example": "s-p$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-padding",
+      "type": "map-alias"
+    },
+    {
+      "alias": "scroll-padding-block",
+      "property": "scroll-padding-block",
+      "example": "scroll-padding-block$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-padding-block",
+      "type": "property"
+    },
+    {
+      "alias": "s-p-b-e",
+      "property": "scroll-padding-block-end",
+      "example": "s-p-b-e$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-padding-block-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-p-b-s",
+      "property": "scroll-padding-block-start",
+      "example": "s-p-b-s$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-padding-block-start",
+      "type": "map-alias"
+    },
+    {
+      "alias": "scroll-padding-bottom",
+      "property": "scroll-padding-bottom",
+      "example": "scroll-padding-bottom$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-padding-bottom",
+      "type": "property"
+    },
+    {
+      "alias": "s-p-i",
+      "property": "scroll-padding-inline",
+      "example": "s-p-i$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-padding-inline",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-p-i-e",
+      "property": "scroll-padding-inline-end",
+      "example": "s-p-i-e$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-padding-inline-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-p-i-s",
+      "property": "scroll-padding-inline-start",
+      "example": "s-p-i-s$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-padding-inline-start",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-p-l",
+      "property": "scroll-padding-left",
+      "example": "s-p-l$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-padding-left",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-p-r",
+      "property": "scroll-padding-right",
+      "example": "s-p-r$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-padding-right",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-p-t",
+      "property": "scroll-padding-top",
+      "example": "s-p-t$16",
+      "category": "Size & Spacing",
+      "anchor": "property-scroll-padding-top",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-s-a",
+      "property": "scroll-snap-align",
+      "example": "s-s-a$center",
+      "category": "Animation & Transform",
+      "anchor": "property-scroll-snap-align",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-s-s",
+      "property": "scroll-snap-stop",
+      "example": "s-s-s$always",
+      "category": "Animation & Transform",
+      "anchor": "property-scroll-snap-stop",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-s-t",
+      "property": "scroll-snap-type",
+      "example": "s-s-t$x$mandatory",
+      "category": "Animation & Transform",
+      "anchor": "property-scroll-snap-type",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-t-g",
+      "property": "scroll-target-group",
+      "example": "s-t-g$auto",
+      "category": "Other",
+      "anchor": "property-scroll-target-group",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-t",
+      "property": "scroll-timeline",
+      "example": "s-t$--my-timeline$block",
+      "category": "Animation & Transform",
+      "anchor": "property-scroll-timeline",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-t-a",
+      "property": "scroll-timeline-axis",
+      "example": "s-t-a$block",
+      "category": "Animation & Transform",
+      "anchor": "property-scroll-timeline-axis",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-t-n",
+      "property": "scroll-timeline-name",
+      "example": "s-t-n$--my-timeline",
+      "category": "Animation & Transform",
+      "anchor": "property-scroll-timeline-name",
+      "type": "map-alias"
+    },
+    {
+      "alias": "scrollbar-color",
+      "property": "scrollbar-color",
+      "example": "scrollbar-color$primary",
+      "category": "Other",
+      "anchor": "property-scrollbar-color",
+      "type": "property"
+    },
+    {
+      "alias": "s-g",
+      "property": "scrollbar-gutter",
+      "example": "s-g$stable",
+      "category": "Other",
+      "anchor": "property-scrollbar-gutter",
+      "type": "map-alias"
+    },
+    {
+      "alias": "scrollbar-width",
+      "property": "scrollbar-width",
+      "example": "scrollbar-width$16",
+      "category": "Other",
+      "anchor": "property-scrollbar-width",
+      "type": "property"
+    },
+    {
+      "alias": "shape-image-threshold",
+      "property": "shape-image-threshold",
+      "example": "shape-image-threshold$0.5",
+      "category": "Other",
+      "anchor": "property-shape-image-threshold",
+      "type": "property"
+    },
+    {
+      "alias": "shape-margin",
+      "property": "shape-margin",
+      "example": "shape-margin$16",
+      "category": "Other",
+      "anchor": "property-shape-margin",
+      "type": "property"
+    },
+    {
+      "alias": "shape-outside",
+      "property": "shape-outside",
+      "example": "shape-outside$circle(50%)",
+      "category": "Other",
+      "anchor": "property-shape-outside",
+      "type": "property"
+    },
+    {
+      "alias": "s-r",
+      "property": "shape-rendering",
+      "example": "s-r$geometricPrecision",
+      "category": "SVG & Masking",
+      "anchor": "property-shape-rendering",
+      "type": "map-alias"
+    },
+    {
+      "alias": "s-a",
+      "property": "speak-as",
+      "example": "s-a$spell-out",
+      "category": "Other",
+      "anchor": "property-speak-as",
+      "type": "map-alias"
+    },
+    {
+      "alias": "stop-color",
+      "property": "stop-color",
+      "example": "stop-color$primary",
+      "category": "Color & Background",
+      "anchor": "property-stop-color",
+      "type": "property"
+    },
+    {
+      "alias": "stop-opacity",
+      "property": "stop-opacity",
+      "example": "stop-opacity$0.5",
+      "category": "Other",
+      "anchor": "property-stop-opacity",
+      "type": "property"
+    },
+    {
+      "alias": "stroke",
+      "property": "stroke",
+      "example": "stroke$primary",
+      "category": "Color & Background",
+      "anchor": "property-stroke",
+      "type": "property"
+    },
+    {
+      "alias": "stroke-dasharray",
+      "property": "stroke-dasharray",
+      "example": "stroke-dasharray$4",
+      "category": "Color & Background",
+      "anchor": "property-stroke-dasharray",
+      "type": "property"
+    },
+    {
+      "alias": "stroke-dashoffset",
+      "property": "stroke-dashoffset",
+      "example": "stroke-dashoffset$4",
+      "category": "Color & Background",
+      "anchor": "property-stroke-dashoffset",
+      "type": "property"
+    },
+    {
+      "alias": "stroke-linecap",
+      "property": "stroke-linecap",
+      "example": "stroke-linecap$round",
+      "category": "Color & Background",
+      "anchor": "property-stroke-linecap",
+      "type": "property"
+    },
+    {
+      "alias": "stroke-linejoin",
+      "property": "stroke-linejoin",
+      "example": "stroke-linejoin$round",
+      "category": "Color & Background",
+      "anchor": "property-stroke-linejoin",
+      "type": "property"
+    },
+    {
+      "alias": "stroke-miterlimit",
+      "property": "stroke-miterlimit",
+      "example": "stroke-miterlimit$4",
+      "category": "Color & Background",
+      "anchor": "property-stroke-miterlimit",
+      "type": "property"
+    },
+    {
+      "alias": "stroke-opacity",
+      "property": "stroke-opacity",
+      "example": "stroke-opacity$0.5",
+      "category": "Color & Background",
+      "anchor": "property-stroke-opacity",
+      "type": "property"
+    },
+    {
+      "alias": "stroke-width",
+      "property": "stroke-width",
+      "example": "stroke-width$16",
+      "category": "Color & Background",
+      "anchor": "property-stroke-width",
+      "type": "property"
+    },
+    {
+      "alias": "tab-size",
+      "property": "tab-size",
+      "example": "tab-size$4",
+      "category": "Typography",
+      "anchor": "property-tab-size",
+      "type": "property"
+    },
+    {
+      "alias": "t-l",
+      "property": "table-layout",
+      "example": "t-l$fixed",
+      "category": "Other",
+      "anchor": "property-table-layout",
+      "type": "map-alias"
+    },
+    {
+      "alias": "text-align",
+      "property": "text-align",
+      "example": "text-align$center",
+      "category": "Typography",
+      "anchor": "property-text-align",
+      "type": "property"
+    },
+    {
+      "alias": "t-a-l",
+      "property": "text-align-last",
+      "example": "t-a-l$center",
+      "category": "Typography",
+      "anchor": "property-text-align-last",
+      "type": "map-alias"
+    },
+    {
+      "alias": "text-anchor",
+      "property": "text-anchor",
+      "example": "text-anchor$middle",
+      "category": "Typography",
+      "anchor": "property-text-anchor",
+      "type": "property"
+    },
+    {
+      "alias": "text-autospace",
+      "property": "text-autospace",
+      "example": "text-autospace$normal",
+      "category": "Typography",
+      "anchor": "property-text-autospace",
+      "type": "property"
+    },
+    {
+      "alias": "text-box",
+      "property": "text-box",
+      "example": "text-box$trim-both$cap$alphabetic",
+      "category": "Typography",
+      "anchor": "property-text-box",
+      "type": "property"
+    },
+    {
+      "alias": "t-b-e",
+      "property": "text-box-edge",
+      "example": "t-b-e$cap$alphabetic",
+      "category": "Typography",
+      "anchor": "property-text-box-edge",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-b-t",
+      "property": "text-box-trim",
+      "example": "t-b-t$trim-both",
+      "category": "Typography",
+      "anchor": "property-text-box-trim",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-c-u",
+      "property": "text-combine-upright",
+      "example": "t-c-u$all",
+      "category": "Typography",
+      "anchor": "property-text-combine-upright",
+      "type": "map-alias"
+    },
+    {
+      "alias": "text-decoration",
+      "property": "text-decoration",
+      "example": "text-decoration$underline",
+      "category": "Typography",
+      "anchor": "property-text-decoration",
+      "type": "property"
+    },
+    {
+      "alias": "t-d-c",
+      "property": "text-decoration-color",
+      "example": "t-d-c$primary",
+      "category": "Typography",
+      "anchor": "property-text-decoration-color",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-d-i",
+      "property": "text-decoration-inset",
+      "example": "t-d-i$2px",
+      "category": "Typography",
+      "anchor": "property-text-decoration-inset",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-d-l",
+      "property": "text-decoration-line",
+      "example": "t-d-l$underline",
+      "category": "Typography",
+      "anchor": "property-text-decoration-line",
+      "type": "map-alias"
+    },
+    {
+      "alias": "text-decoration-skip",
+      "property": "text-decoration-skip",
+      "example": "text-decoration-skip$none",
+      "category": "Typography",
+      "anchor": "property-text-decoration-skip",
+      "type": "property"
+    },
+    {
+      "alias": "t-d-s-i",
+      "property": "text-decoration-skip-ink",
+      "example": "t-d-s-i$none",
+      "category": "Typography",
+      "anchor": "property-text-decoration-skip-ink",
+      "type": "map-alias"
+    },
+    {
+      "alias": "text-decoration-style",
+      "property": "text-decoration-style",
+      "example": "text-decoration-style$wavy",
+      "category": "Typography",
+      "anchor": "property-text-decoration-style",
+      "type": "property"
+    },
+    {
+      "alias": "t-d-t",
+      "property": "text-decoration-thickness",
+      "example": "t-d-t$16",
+      "category": "Typography",
+      "anchor": "property-text-decoration-thickness",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-e",
+      "property": "text-emphasis",
+      "example": "t-e$dot$primary",
+      "category": "Typography",
+      "anchor": "property-text-emphasis",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-e-c",
+      "property": "text-emphasis-color",
+      "example": "t-e-c$primary",
+      "category": "Typography",
+      "anchor": "property-text-emphasis-color",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-e-p",
+      "property": "text-emphasis-position",
+      "example": "t-e-p$over$right",
+      "category": "Typography",
+      "anchor": "property-text-emphasis-position",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-e-s",
+      "property": "text-emphasis-style",
+      "example": "t-e-s$dot",
+      "category": "Typography",
+      "anchor": "property-text-emphasis-style",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-i",
+      "property": "text-indent",
+      "example": "t-i$16",
+      "category": "Typography",
+      "anchor": "property-text-indent",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-j",
+      "property": "text-justify",
+      "example": "t-j$inter-word",
+      "category": "Typography",
+      "anchor": "property-text-justify",
+      "type": "map-alias"
+    },
+    {
+      "alias": "text-orientation",
+      "property": "text-orientation",
+      "example": "text-orientation$mixed",
+      "category": "Typography",
+      "anchor": "property-text-orientation",
+      "type": "property"
+    },
+    {
+      "alias": "text-overflow",
+      "property": "text-overflow",
+      "example": "text-overflow$ellipsis",
+      "category": "Typography",
+      "anchor": "property-text-overflow",
+      "type": "property"
+    },
+    {
+      "alias": "t-r",
+      "property": "text-rendering",
+      "example": "t-r$optimizeLegibility",
+      "category": "SVG & Masking",
+      "anchor": "property-text-rendering",
+      "type": "map-alias"
+    },
+    {
+      "alias": "text-shadow",
+      "property": "text-shadow",
+      "example": "text-shadow$0$0$4px$primary",
+      "category": "Typography",
+      "anchor": "property-text-shadow",
+      "type": "property"
+    },
+    {
+      "alias": "t-s-a",
+      "property": "text-size-adjust",
+      "example": "t-s-a$100pct",
+      "category": "Typography",
+      "anchor": "property-text-size-adjust",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-s-t",
+      "property": "text-spacing-trim",
+      "example": "t-s-t$trim-start",
+      "category": "Typography",
+      "anchor": "property-text-spacing-trim",
+      "type": "map-alias"
+    },
+    {
+      "alias": "text-transform",
+      "property": "text-transform",
+      "example": "text-transform$uppercase",
+      "category": "Typography",
+      "anchor": "property-text-transform",
+      "type": "property"
+    },
+    {
+      "alias": "t-u-o",
+      "property": "text-underline-offset",
+      "example": "t-u-o$16",
+      "category": "Typography",
+      "anchor": "property-text-underline-offset",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-u-p",
+      "property": "text-underline-position",
+      "example": "t-u-p$under",
+      "category": "Typography",
+      "anchor": "property-text-underline-position",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-w",
+      "property": "text-wrap",
+      "example": "t-w$balance",
+      "category": "Typography",
+      "anchor": "property-text-wrap",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-w-m",
+      "property": "text-wrap-mode",
+      "example": "t-w-m$wrap",
+      "category": "Typography",
+      "anchor": "property-text-wrap-mode",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-w-s",
+      "property": "text-wrap-style",
+      "example": "t-w-s$balance",
+      "category": "Typography",
+      "anchor": "property-text-wrap-style",
+      "type": "map-alias"
+    },
+    {
+      "alias": "timeline-scope",
+      "property": "timeline-scope",
+      "example": "timeline-scope$--my-timeline",
+      "category": "Animation & Transform",
+      "anchor": "property-timeline-scope",
+      "type": "property"
+    },
+    {
+      "alias": "timeline-trigger",
+      "property": "timeline-trigger",
+      "example": "timeline-trigger$--my-trigger$--my-timeline",
+      "category": "Animation & Transform",
+      "anchor": "property-timeline-trigger",
+      "type": "property"
+    },
+    {
+      "alias": "t-t-a-r",
+      "property": "timeline-trigger-active-range",
+      "example": "t-t-a-r$entry$50pct",
+      "category": "Animation & Transform",
+      "anchor": "property-timeline-trigger-active-range",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-t-a-r-e",
+      "property": "timeline-trigger-active-range-end",
+      "example": "t-t-a-r-e$exit$50pct",
+      "category": "Animation & Transform",
+      "anchor": "property-timeline-trigger-active-range-end",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-t-a-r-s",
+      "property": "timeline-trigger-active-range-start",
+      "example": "t-t-a-r-s$entry$50pct",
+      "category": "Animation & Transform",
+      "anchor": "property-timeline-trigger-active-range-start",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-t-n",
+      "property": "timeline-trigger-name",
+      "example": "t-t-n$--my-trigger",
+      "category": "Animation & Transform",
+      "anchor": "property-timeline-trigger-name",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-t-s",
+      "property": "timeline-trigger-source",
+      "example": "t-t-s$--my-timeline",
+      "category": "Animation & Transform",
+      "anchor": "property-timeline-trigger-source",
+      "type": "map-alias"
+    },
+    {
+      "alias": "top",
+      "property": "top",
+      "example": "top$16",
+      "category": "Layout",
+      "anchor": "property-top",
+      "type": "property"
+    },
+    {
+      "alias": "touch-action",
+      "property": "touch-action",
+      "example": "touch-action$none",
+      "category": "Other",
+      "anchor": "property-touch-action",
+      "type": "property"
+    },
+    {
+      "alias": "transform",
+      "property": "transform",
+      "example": "transform$rotate(45deg)",
+      "category": "Animation & Transform",
+      "anchor": "property-transform",
+      "type": "property"
+    },
+    {
+      "alias": "transform-box",
+      "property": "transform-box",
+      "example": "transform-box$fill-box",
+      "category": "Animation & Transform",
+      "anchor": "property-transform-box",
+      "type": "property"
+    },
+    {
+      "alias": "transform-origin",
+      "property": "transform-origin",
+      "example": "transform-origin$16",
+      "category": "Animation & Transform",
+      "anchor": "property-transform-origin",
+      "type": "property"
+    },
+    {
+      "alias": "transform-style",
+      "property": "transform-style",
+      "example": "transform-style$preserve-3d",
+      "category": "Animation & Transform",
+      "anchor": "property-transform-style",
+      "type": "property"
+    },
+    {
+      "alias": "transition",
+      "property": "transition",
+      "example": "transition$opacity$200ms",
+      "category": "Animation & Transform",
+      "anchor": "property-transition",
+      "type": "property"
+    },
+    {
+      "alias": "transition-behavior",
+      "property": "transition-behavior",
+      "example": "transition-behavior$allow-discrete",
+      "category": "Animation & Transform",
+      "anchor": "property-transition-behavior",
+      "type": "property"
+    },
+    {
+      "alias": "transition-delay",
+      "property": "transition-delay",
+      "example": "transition-delay$100ms",
+      "category": "Animation & Transform",
+      "anchor": "property-transition-delay",
+      "type": "property"
+    },
+    {
+      "alias": "transition-duration",
+      "property": "transition-duration",
+      "example": "transition-duration$200ms",
+      "category": "Animation & Transform",
+      "anchor": "property-transition-duration",
+      "type": "property"
+    },
+    {
+      "alias": "t-p",
+      "property": "transition-property",
+      "example": "t-p$opacity",
+      "category": "Animation & Transform",
+      "anchor": "property-transition-property",
+      "type": "map-alias"
+    },
+    {
+      "alias": "t-t-f",
+      "property": "transition-timing-function",
+      "example": "t-t-f$ease",
+      "category": "Animation & Transform",
+      "anchor": "property-transition-timing-function",
+      "type": "map-alias"
+    },
+    {
+      "alias": "translate",
+      "property": "translate",
+      "example": "translate$16",
+      "category": "Animation & Transform",
+      "anchor": "property-translate",
+      "type": "property"
+    },
+    {
+      "alias": "trigger-scope",
+      "property": "trigger-scope",
+      "example": "trigger-scope$--my-trigger",
+      "category": "Other",
+      "anchor": "property-trigger-scope",
+      "type": "property"
+    },
+    {
+      "alias": "u-b",
+      "property": "unicode-bidi",
+      "example": "u-b$isolate",
+      "category": "Layout",
+      "anchor": "property-unicode-bidi",
+      "type": "map-alias"
+    },
+    {
+      "alias": "u-m",
+      "property": "user-modify",
+      "example": "u-m$read-write",
+      "category": "Other",
+      "anchor": "property-user-modify",
+      "type": "map-alias"
+    },
+    {
+      "alias": "u-s",
+      "property": "user-select",
+      "example": "u-s$none",
+      "category": "Other",
+      "anchor": "property-user-select",
+      "type": "map-alias"
+    },
+    {
+      "alias": "v-e",
+      "property": "vector-effect",
+      "example": "v-e$non-scaling-stroke",
+      "category": "SVG & Masking",
+      "anchor": "property-vector-effect",
+      "type": "map-alias"
+    },
+    {
+      "alias": "v-a",
+      "property": "vertical-align",
+      "example": "v-a$middle",
+      "category": "Typography",
+      "anchor": "property-vertical-align",
+      "type": "map-alias"
+    },
+    {
+      "alias": "v-t",
+      "property": "view-timeline",
+      "example": "v-t$--my-view$block",
+      "category": "Animation & Transform",
+      "anchor": "property-view-timeline",
+      "type": "map-alias"
+    },
+    {
+      "alias": "v-t-a",
+      "property": "view-timeline-axis",
+      "example": "v-t-a$block",
+      "category": "Animation & Transform",
+      "anchor": "property-view-timeline-axis",
+      "type": "map-alias"
+    },
+    {
+      "alias": "v-t-i",
+      "property": "view-timeline-inset",
+      "example": "v-t-i$10px",
+      "category": "Animation & Transform",
+      "anchor": "property-view-timeline-inset",
+      "type": "map-alias"
+    },
+    {
+      "alias": "view-timeline-name",
+      "property": "view-timeline-name",
+      "example": "view-timeline-name$--my-view",
+      "category": "Animation & Transform",
+      "anchor": "property-view-timeline-name",
+      "type": "property"
+    },
+    {
+      "alias": "v-t-c",
+      "property": "view-transition-class",
+      "example": "v-t-c$card",
+      "category": "Other",
+      "anchor": "property-view-transition-class",
+      "type": "map-alias"
+    },
+    {
+      "alias": "view-transition-name",
+      "property": "view-transition-name",
+      "example": "view-transition-name$card",
+      "category": "Other",
+      "anchor": "property-view-transition-name",
+      "type": "property"
+    },
+    {
+      "alias": "v-t-s",
+      "property": "view-transition-scope",
+      "example": "v-t-s$card",
+      "category": "Other",
+      "anchor": "property-view-transition-scope",
+      "type": "map-alias"
+    },
+    {
+      "alias": "v",
+      "property": "visibility",
+      "example": "v$hidden",
+      "category": "Layout",
+      "anchor": "property-visibility",
+      "type": "map-alias"
+    },
+    {
+      "alias": "white-space",
+      "property": "white-space",
+      "example": "white-space$nowrap",
+      "category": "Typography",
+      "anchor": "property-white-space",
+      "type": "property"
+    },
+    {
+      "alias": "w-s-c",
+      "property": "white-space-collapse",
+      "example": "w-s-c$collapse",
+      "category": "Typography",
+      "anchor": "property-white-space-collapse",
+      "type": "map-alias"
+    },
+    {
+      "alias": "widows",
+      "property": "widows",
+      "example": "widows$2",
+      "category": "Typography",
+      "anchor": "property-widows",
+      "type": "property"
+    },
+    {
+      "alias": "width",
+      "property": "width",
+      "example": "width$16",
+      "category": "Size & Spacing",
+      "anchor": "property-width",
+      "type": "property"
+    },
+    {
+      "alias": "w-c",
+      "property": "will-change",
+      "example": "w-c$transform",
+      "category": "Animation & Transform",
+      "anchor": "property-will-change",
+      "type": "map-alias"
+    },
+    {
+      "alias": "w-b",
+      "property": "word-break",
+      "example": "w-b$break-all",
+      "category": "Typography",
+      "anchor": "property-word-break",
+      "type": "map-alias"
+    },
+    {
+      "alias": "word-spacing",
+      "property": "word-spacing",
+      "example": "word-spacing$16",
+      "category": "Typography",
+      "anchor": "property-word-spacing",
+      "type": "property"
+    },
+    {
+      "alias": "w-m",
+      "property": "writing-mode",
+      "example": "w-m$vertical-rl",
+      "category": "Layout",
+      "anchor": "property-writing-mode",
+      "type": "map-alias"
+    },
+    {
+      "alias": "x",
+      "property": "x",
+      "example": "x$16",
+      "category": "SVG & Masking",
+      "anchor": "property-x",
+      "type": "property"
+    },
+    {
+      "alias": "y",
+      "property": "y",
+      "example": "y$16",
+      "category": "SVG & Masking",
+      "anchor": "property-y",
+      "type": "property"
+    },
+    {
+      "alias": "z-i",
+      "property": "z-index",
+      "example": "z-i$10",
+      "category": "Layout",
+      "anchor": "property-z-index",
+      "type": "map-alias"
+    },
+    {
+      "alias": "z",
+      "property": "zoom",
+      "example": "zoom$1.5",
+      "category": "Other",
+      "anchor": "property-zoom",
+      "type": "map-alias"
+    }
+  ],
+  "extras": [
+    {
+      "alias": "svg-d",
+      "property": "d",
+      "example": "svg-d$M0,0L10,10",
+      "category": "SVG & Masking",
+      "anchor": "alias-svg-d",
+      "note": "SVG path data. The map alias d is used by Laibery for display."
+    },
+    {
+      "alias": "svg-r",
+      "property": "r",
+      "example": "svg-r$10",
+      "category": "SVG & Masking",
+      "anchor": "alias-svg-r",
+      "note": "SVG radius. The map alias r is used by Laibery for border-radius."
+    }
+  ],
+  "conflicts": [
+    {
+      "mapAlias": "d",
+      "mapProperty": "d",
+      "laiberyProperty": "display",
+      "use": "svg-d$M0,0L10,10"
+    },
+    {
+      "mapAlias": "r",
+      "mapProperty": "r",
+      "laiberyProperty": "border-radius",
+      "use": "svg-r$10"
+    },
+    {
+      "mapAlias": "z",
+      "mapProperty": "zoom",
+      "laiberyProperty": "z-index",
+      "use": "zoom$1.5"
+    }
+  ],
+  "palette": [
+    [
+      "primary",
+      "#3b82f6"
+    ],
+    [
+      "primary-dark",
+      "#1d4ed8"
+    ],
+    [
+      "secondary",
+      "#64748b"
+    ],
+    [
+      "success",
+      "#16a34a"
+    ],
+    [
+      "danger",
+      "#dc2626"
+    ],
+    [
+      "warning",
+      "#d97706"
+    ],
+    [
+      "info",
+      "#0891b2"
+    ],
+    [
+      "light",
+      "#f8fafc"
+    ],
+    [
+      "dark",
+      "#0f172a"
+    ],
+    [
+      "muted",
+      "#64748b"
+    ],
+    [
+      "border",
+      "#e2e8f0"
+    ],
+    [
+      "surface",
+      "#ffffff"
+    ],
+    [
+      "text",
+      "#0f172a"
+    ]
+  ],
+  "api": [
+    [
+      "Laibery.start()",
+      "Scan the document and observe changes. Idempotent."
+    ],
+    [
+      "Laibery.stop()",
+      "Disconnect the MutationObserver."
+    ],
+    [
+      "Laibery.add(...classes)",
+      "Register tokens immediately, even if they are not in the DOM."
+    ],
+    [
+      "Laibery.preview(token)",
+      "Return the CSS for one token, or null if invalid."
+    ],
+    [
+      "Laibery.css()",
+      "Return the complete generated stylesheet."
+    ],
+    [
+      "Laibery.theme({ ... })",
+      "Update palette colors and re-render variables."
+    ],
+    [
+      "Laibery.define(key, priority, build)",
+      "Add a custom property."
+    ],
+    [
+      "Laibery.config(options)",
+      "Read or set important and nonce."
+    ],
+    [
+      "Laibery.version",
+      "Current version string."
+    ]
+  ],
+  "limitations": [
+    "Values cannot contain spaces. Use aliases or functions without spaces (calc(100%/3) works; calc(100% - 3px) does not).",
+    "Runtime only: there is no static extraction, SSR stylesheet or build-time purging.",
+    "JavaScript is required; the page has no styles until Laibery runs.",
+    "No automatic vendor prefixing.",
+    "Override relies on !important plus stylesheet order. A site inline style with !important still wins; a site !important rule with higher specificity also wins.",
+    "Strict CSP needs a nonce.",
+    "Shadow DOM is not scanned; only the main document is observed.",
+    "Rules accumulate until reload; there is no automatic cleanup for tokens no longer in the DOM.",
+    "dark: is class-based (.dark ancestor), not prefers-color-scheme.",
+    "Variants cover pseudo-classes, breakpoints and dark:; there are no @supports or container-query variants yet."
+  ],
+  "docs": {
+    "html": "index.html",
+    "markdown": "aliases.md",
+    "llms": "llms.txt",
+    "llmsFull": "llms-full.txt",
+    "sourceMap": "css-property-alias-map.txt"
+  }
+}

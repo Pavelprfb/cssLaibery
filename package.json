@@ -1,0 +1,29 @@
+{
+  "name": "laibery",
+  "version": "0.2.0",
+  "description": "Runtime utility CSS generated from class names. b$2$s$red becomes border: 2px solid red, with 520 CSS properties and site-CSS override by default.",
+  "main": "laibery.js",
+  "license": "MIT",
+  "keywords": [
+    "css",
+    "utility",
+    "runtime",
+    "class-names",
+    "zero-build",
+    "no-build",
+    "override",
+    "important",
+    "dynamic-css"
+  ],
+  "scripts": {
+    "test": "node test/laibery.test.js && node test/docs.test.js",
+    "test:docs": "node test/docs.test.js",
+    "docs": "node scripts/build-docs.js"
+  },
+  "files": [
+    "laibery.js",
+    "README.md",
+    "LICENSE",
+    "docs"
+  ]
+}

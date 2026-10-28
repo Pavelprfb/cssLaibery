@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laibery — write CSS inside your class names</title>
+<meta name="description" content="A tiny runtime utility CSS engine. Classes like b$2$s$red become real CSS, generated on demand — no build step.">
+<script src="../laibery.js"></script>
+<style>
+  /* Demo-only styles. Everything else on this page comes from Laibery. */
+  html { scroll-behavior: smooth; }
+  section { scroll-margin-top: 84px; }
+  #play-input:focus { outline: 2px solid var(--lb-primary); outline-offset: 2px; }
+  ::selection { background: #bfdbfe; color: #0f172a; }
+  /* Deliberately "earlier site CSS" used by the override demo. */
+  .demo-site-rule { border: 1px dashed #94a3b8; background: #ffe4e6; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body class="bg$light c$text ff$sans m$0">
+
+  <header class="pos$sticky top$0 z$10 bg$surface bb$1$s$border">
+    <div class="maxw$1100 mx$auto p$14$24 d$flex items$c justify$sb gap$16 wrap$wrap">
+      <a href="#" class="d$flex items$c gap$10 c$text td$n">
+        <span class="d$inline-flex items$c justify$c w$36 h$36 r$10 bg$primary c$white fw$bold fz$20">L</span>
+        <span>
+          <span class="d$block fz$17 fw$bold lh$1.2">Laibery</span>
+          <span class="d$block fz$12 c$muted">CSS from class names</span>
+        </span>
+      </a>
+      <nav class="d$flex items$c gap$4 fz$14 wrap$wrap">
+        <a href="#syntax" class="c$text td$n p$8$12 r$8 hover:bg$light">Syntax</a>
+        <a href="#playground" class="c$text td$n p$8$12 r$8 hover:bg$light">Playground</a>
+        <a href="#override" class="c$text td$n p$8$12 r$8 hover:bg$light">Override</a>
+        <a href="#cheatsheet" class="c$text td$n p$8$12 r$8 hover:bg$light">Cheatsheet</a>
+        <a href="#dynamic" class="c$text td$n p$8$12 r$8 hover:bg$light">Dynamic</a>
+        <a href="../docs/index.html" class="c$text td$n p$8$12 r$8 hover:bg$light">Docs</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="maxw$1100 mx$auto p$20$24">
+
+    <!-- ============ hero ============ -->
+    <section class="d$grid cols$1 lg:cols$2 gap$32 items$c p$40$0$32">
+      <div>
+        <span class="d$inline-block bg$primary c$white p$4$10 r$full fz$12 fw$semibold ls$1">v0.2.0</span>
+        <h1 class="fz$44 fw$black lh$1.1 m$16$0$14 maxw$560">
+          Write the style <span class="c$primary">inside</span> the class name.
+        </h1>
+        <p class="fz$18 c$muted lh$1.6 maxw$540 m$0">
+          Laibery reads tokens like
+          <code class="ff$mono fz$15 bg$dark c$white p$2$6 r$6">b$2$s$red</code>
+          and builds the CSS at runtime. No build step, no config file — just include one script and start typing.
+        </p>
+        <p class="fz$15 c$muted lh$1.6 maxw$540 m$12$0$0">
+          It wins over normal CSS the site already wrote: declarations carry <code class="ff$mono fz$13">!important</code>
+          and the generated sheet is appended last.
+        </p>
+        <div class="d$flex gap$10 wrap$wrap m$24$0$0">
+          <a href="#playground" class="d$inline-flex items$c justify$c gap$8 p$11$20 r$9 bg$primary c$white fw$semibold fz$14 td$n cur$p tr$150 hover:bg$primary-dark">
+            Try the playground
+          </a>
+          <a href="#cheatsheet" class="d$inline-flex items$c justify$c gap$8 p$11$20 r$9 bg$surface c$text fw$semibold fz$14 td$n cur$p b$1$s$border tr$150 hover:bg$light">
+            See the cheatsheet
+          </a>
+        </div>
+        <p class="fz$13 c$muted m$16$0$0">
+          No dependencies · one file · MIT
+        </p>
+      </div>
+
+      <div class="bg$surface b$1$s$border r$14 p$24 sh$md">
+        <div class="fz$12 fw$bold c$muted tt$u ls$1">Your class</div>
+        <code class="d$block bg$dark c$white p$12$14 r$8 ff$mono fz$14 m$10$0$18 ov$a">b$2$s$red p$16 r$8</code>
+
+        <div class="fz$12 fw$bold c$muted tt$u ls$1">The result</div>
+        <div class="b$2$s$red p$16 r$8 m$10$0$18">A box with a 2px solid red border.</div>
+
+        <div class="fz$12 fw$bold c$muted tt$u ls$1">Generated CSS</div>
+        <pre class="bg$dark c$white p$12$14 r$8 ff$mono fz$12 m$10$0$0 ov$a"><code>[class~="b$2$s$red"] {
+  border-width: 2px !important;
+  border-style: solid !important;
+  border-color: red !important;
+}</code></pre>
+        <p class="fz$12 c$muted lh$1.6 m$10$0$0">
+          <code class="ff$mono">!important</code> is on by default. Opt out with
+          <code class="ff$mono">Laibery.config({ important: false })</code>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ syntax ============ -->
+    <section id="syntax" class="p$32$0">
+      <h2 class="fz$28 fw$bold lh$1.2 m$0$0$8">The whole syntax</h2>
+      <p class="fz$16 c$muted lh$1.6 maxw$680 m$0$0$20">
+        A class is <code class="ff$mono fz$14 bg$white p$2$6 r$6 b$1$s$border">property$value$value</code>.
+        The first segment picks the property; the rest are values, in order.
+      </p>
+
+      <div class="d$grid cols$1 sm:cols$2 lg:cols$3 gap$16">
+        <div class="bg$surface b$1$s$border r$14 p$22 sh$sm">
+          <div class="fz$12 fw$bold c$primary tt$u ls$1">1 · Parse</div>
+          <div class="fz$17 fw$semibold m$8$0$6">Split the token</div>
+          <p class="fz$14 c$muted lh$1.6 m$0">
+            <code class="ff$mono fz$13">b$2$s$red</code> → property <code class="ff$mono fz$13">b</code>,
+            values <code class="ff$mono fz$13">2</code>, <code class="ff$mono fz$13">s</code>, <code class="ff$mono fz$13">red</code>.
+          </p>
+        </div>
+        <div class="bg$surface b$1$s$border r$14 p$22 sh$sm">
+          <div class="fz$12 fw$bold c$primary tt$u ls$1">2 · Generate</div>
+          <div class="fz$17 fw$semibold m$8$0$6">Turn it into CSS</div>
+          <p class="fz$14 c$muted lh$1.6 m$0">
+            Numbers become pixels, short values become keywords, and the rule is appended to one stylesheet.
+          </p>
+        </div>
+        <div class="bg$surface b$1$s$border r$14 p$22 sh$sm">
+          <div class="fz$12 fw$bold c$primary tt$u ls$1">3 · Observe</div>
+          <div class="fz$17 fw$semibold m$8$0$6">Keep watching</div>
+          <p class="fz$14 c$muted lh$1.6 m$0">
+            A <code class="ff$mono fz$13">MutationObserver</code> picks up new elements and changed classes automatically.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ playground ============ -->
+    <section id="playground" class="p$32$0">
+      <h2 class="fz$28 fw$bold lh$1.2 m$0$0$8">Playground</h2>
+      <p class="fz$16 c$muted lh$1.6 maxw$680 m$0$0$20">
+        Edit the class list. Every new token is parsed and inserted into the page's stylesheet instantly.
+      </p>
+
+      <div class="bg$surface b$1$s$border r$14 p$22 sh$sm">
+        <label for="play-input" class="d$block fz$13 fw$semibold c$muted">Class list</label>
+        <input id="play-input" type="text" spellcheck="false"
+               class="d$block w$full p$10$12 r$8 b$1$s$border fz$14 ff$mono m$8$0$18"
+               value="b$2$s$red p$16 r$8 bg$surface ta$c">
+        <div id="play-box" class="b$2$s$red p$16 r$8 bg$surface ta$c">Live preview</div>
+        <p class="fz$13 c$muted m$14$0$0">
+          Try <code class="ff$mono fz$13">hover:bg$primary</code>,
+          <code class="ff$mono fz$13">md:cols$3</code>, or
+          <code class="ff$mono fz$13">b$4$d$primary</code>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ override ============ -->
+    <section id="override" class="p$32$0">
+      <h2 class="fz$28 fw$bold lh$1.2 m$0$0$8">Wins over earlier site CSS</h2>
+      <p class="fz$16 c$muted lh$1.6 maxw$680 m$0$0$20">
+        Laibery writes its declarations with
+        <code class="ff$mono fz$14 bg$white p$2$6 r$6 b$1$s$border">!important</code>
+        and keeps its stylesheet after the page's own CSS. A normal rule the site already wrote loses,
+        without editing that stylesheet. A site rule with <code class="ff$mono fz$14">!important</code>
+        and higher specificity can still win. Opt out with
+        <code class="ff$mono fz$14">Laibery.config({ important: false })</code>.
+      </p>
+
+      <div class="d$grid cols$1 md:cols$2 gap$16">
+        <div class="bg$surface b$1$s$border r$14 p$22 sh$sm">
+          <div class="fz$12 fw$bold c$muted tt$u ls$1">Site CSS only</div>
+          <div class="demo-site-rule p$16 r$8 m$12$0$0">border: 1px dashed slate; background: mistyrose</div>
+          <p class="fz$13 c$muted lh$1.6 m$12$0$0">
+            This box has no Laibery border or background classes. The demo page's own rule controls it.
+          </p>
+        </div>
+        <div class="bg$surface b$1$s$border r$14 p$22 sh$sm">
+          <div class="fz$12 fw$bold c$muted tt$u ls$1">Same site CSS + Laibery</div>
+          <div class="demo-site-rule b$3$s$primary bg$surface p$16 r$8 m$12$0$0">Laibery wins: 3px solid primary, white surface</div>
+          <p class="fz$13 c$muted lh$1.6 m$12$0$0">
+            The earlier <code class="ff$mono fz$13">.demo-site-rule</code> declaration is overridden by
+            <code class="ff$mono fz$13">b$3$s$primary bg$surface</code>.
+          </p>
+        </div>
+      </div>
+
+      <pre class="bg$dark c$white p$16$18 r$10 ff$mono fz$13 m$16$0$0 ov$a"><code>&lt;style&gt;.demo-site-rule { border: 1px dashed #94a3b8; background: #ffe4e6; }&lt;/style&gt;
+&lt;div class="demo-site-rule b$3$s$primary bg$surface"&gt;Laibery wins&lt;/div&gt;</code></pre>
+    </section>
+
+    <!-- ============ cheatsheet ============ -->
+    <section id="cheatsheet" class="p$32$0">
+      <h2 class="fz$28 fw$bold lh$1.2 m$0$0$8">Cheatsheet</h2>
+      <p class="fz$16 c$muted lh$1.6 maxw$680 m$0$0$20">
+        A few favourites. <a href="../docs/index.html" class="c$primary">docs/index.html</a> has the
+        searchable reference for all 520 properties; <a href="../docs/aliases.md" class="c$primary">docs/aliases.md</a>
+        has the same list as Markdown.
+      </p>
+
+      <div class="d$grid cols$1 sm:cols$2 lg:cols$3 gap$16">
+        <div class="bg$surface b$1$s$border r$14 p$20 sh$sm">
+          <div class="fz$16 fw$bold m$0$0$12">Layout</div>
+          <div class="ff$mono fz$12 lh$2">
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">d$flex</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">d$grid</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">pos$sticky</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">ov$hidden</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">ar$16$9</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">z$10</span>
+          </div>
+        </div>
+
+        <div class="bg$surface b$1$s$border r$14 p$20 sh$sm">
+          <div class="fz$16 fw$bold m$0$0$12">Flex &amp; grid</div>
+          <div class="ff$mono fz$12 lh$2">
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">justify$sb</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">items$c</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">fd$col</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">gap$16</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">cols$3</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">md:cols$3</span>
+          </div>
+        </div>
+
+        <div class="bg$surface b$1$s$border r$14 p$20 sh$sm">
+          <div class="fz$16 fw$bold m$0$0$12">Size &amp; space</div>
+          <div class="ff$mono fz$12 lh$2">
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">p$16</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">p$8$16</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">px$24</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">mx$auto</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">m$-8</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">w$full</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">maxw$960</span>
+          </div>
+        </div>
+
+        <div class="bg$surface b$1$s$border r$14 p$20 sh$sm">
+          <div class="fz$16 fw$bold m$0$0$12">Typography</div>
+          <div class="ff$mono fz$12 lh$2">
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">fz$16</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">fw$bold</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">lh$1.5</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">ta$c</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">tt$u</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">c$primary</span>
+          </div>
+        </div>
+
+        <div class="bg$surface b$1$s$border r$14 p$20 sh$sm">
+          <div class="fz$16 fw$bold m$0$0$12">Borders</div>
+          <div class="ff$mono fz$12 lh$2">
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">b$2$s$red</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">bt$1$s$border</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">bc$primary</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">r$12</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">r$full</span>
+          </div>
+        </div>
+
+        <div class="bg$surface b$1$s$border r$14 p$20 sh$sm">
+          <div class="fz$16 fw$bold m$0$0$12">Effects</div>
+          <div class="ff$mono fz$12 lh$2">
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">sh$md</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">op$50</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">tr$200</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">cur$p</span>
+            <span class="d$inline-block bg$light b$1$s$border r$6 p$3$8 m$0$6$6$0">hover:bg$primary</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg$surface b$1$s$border r$14 p$22 sh$sm m$16$0$0">
+        <div class="fz$16 fw$bold m$0$0$10">Variants</div>
+        <p class="fz$14 c$muted lh$1.6 m$0$0$12">
+          Put a variant before the property, separated by <code class="ff$mono fz$13">:</code>.
+          Pseudo-classes and breakpoints can be combined.
+        </p>
+        <div class="d$grid cols$1 sm:cols$2 lg:cols$4 gap$10 fz$13">
+          <div class="p$10$12 bg$light r$8 ff$mono">hover:bg$primary</div>
+          <div class="p$10$12 bg$light r$8 ff$mono">focus:b$2$s$primary</div>
+          <div class="p$10$12 bg$light r$8 ff$mono">md:cols$3</div>
+          <div class="p$10$12 bg$light r$8 ff$mono">md:hover:b$2$s$primary</div>
+        </div>
+        <div class="dark d$inline-block bg$light b$1$s$border r$8 p$12 m$14$0$0">
+          <span class="d$inline-block bg$white c$text p$6$10 r$6 fz$13 ff$mono dark:bg$dark dark:c$white">dark:bg$dark</span>
+        </div>
+        <p class="fz$13 c$muted m$10$0$0">
+          The <code class="ff$mono fz$13">dark:</code> variant looks for an ancestor with <code class="ff$mono fz$13">class="dark"</code>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ dynamic ============ -->
+    <section id="dynamic" class="p$32$0">
+      <div class="d$flex items$c justify$sb gap$16 wrap$wrap m$0$0$16">
+        <div>
+          <h2 class="fz$28 fw$bold lh$1.2 m$0$0$8">Dynamic by default</h2>
+          <p class="fz$16 c$muted lh$1.6 maxw$620 m$0">
+            Elements added later are handled too. This button appends cards — the classes work immediately.
+          </p>
+        </div>
+        <button id="add-card" type="button" class="d$inline-flex items$c justify$c gap$8 p$10$18 r$8 bg$dark c$white fw$semibold fz$14 ff$sans cur$p b$0 tr$150 hover:bg$primary">
+          Add a card
+        </button>
+      </div>
+
+      <div id="dynamic-cards" class="d$grid cols$1 sm:cols$2 lg:cols$3 gap$14 p$2$0">
+        <div class="bg$surface b$1$s$border r$12 p$18 sh$sm">
+          <div class="fw$bold fz$15">Static card</div>
+          <p class="c$muted fz$13 lh$1.6 m$4$0$0">This one was in the HTML.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="p$28$0$10 c$muted fz$13">
+      <div class="d$flex justify$sb gap$12 wrap$wrap">
+        <span>Laibery v0.2.0 — MIT licensed.</span>
+        <span class="ff$mono">b$2$s$red p$16 r$8</span>
+      </div>
+    </footer>
+
+  </main>
+
+  <script>
+    // Live playground
+    var input = document.getElementById('play-input');
+    var box = document.getElementById('play-box');
+    input.addEventListener('input', function () {
+      box.className = input.value;
+    });
+
+    // MutationObserver demo
+    var count = 0;
+    document.getElementById('add-card').addEventListener('click', function () {
+      count += 1;
+      var card = document.createElement('div');
+      card.className = 'bg$surface b$1$s$border r$12 p$18 sh$sm';
+      card.innerHTML =
+        '<div class="fw$bold fz$15">Dynamic card #' + count + '</div>' +
+        '<p class="c$muted fz$13 lh$1.6 m$4$0$0">Added after load — Laibery picked it up.</p>';
+      document.getElementById('dynamic-cards').appendChild(card);
+    });
+  </script>
+</body>
+</html>
