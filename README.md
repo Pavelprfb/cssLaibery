@@ -663,10 +663,46 @@ npm run docs      # rebuild docs/index.html, classes.json, llms.txt and llms-ful
 
 The test suite runs in Node without a DOM and covers parsing, values, variants, sorting, theme updates, custom properties, `!important`, and config. The docs test checks that all 520 properties are documented, every example parses, every anchor exists, and the AI files are complete.
 
+## Deploy on Render
+
+The repository includes a production `Dockerfile` and a zero-dependency Node server (`server.js`). Render detects the Dockerfile automatically, so no build command or extra runtime is needed.
+
+1. Push the repository to GitHub.
+2. In Render, choose **New +** → **Web Service** and connect the repository.
+3. Keep the detected **Docker** runtime.
+4. Set the health check path to `/healthz`.
+5. Deploy.
+
+The public site name is detected automatically, in this order:
+
+1. the `SITE_NAME` environment variable, if you set one
+2. Render's `RENDER_SERVICE_NAME`
+3. the public request hostname (`RENDER_EXTERNAL_HOSTNAME`)
+4. `Laibery` as the local fallback
+
+The detected name is written into the page `<title>`, `<meta name="application-name">`, `<meta property="og:site_name">`, and is available as JSON at `/site.json`. `GET /healthz` returns a small health payload for Render.
+
+Local production check:
+
+```bash
+npm start
+# http://127.0.0.1:10000/       demo
+# http://127.0.0.1:10000/docs/  documentation
+# http://127.0.0.1:10000/healthz
+```
+
+To force a name locally or on another host, set `SITE_NAME` before starting the server:
+
+```bash
+SITE_NAME="My Laibery" npm start
+```
+
 Project layout:
 
 ```
 laibery.js             the library (UMD, no dependencies)
+server.js              zero-dependency production server for Render
+Dockerfile             production container image
 demo/index.html        self-styled demo + playground + override example
 docs/index.html        searchable documentation route for every class
 docs/aliases.md        all 520 CSS properties and examples
@@ -682,9 +718,14 @@ README.md
 LICENSE
 ```
 
-To view the demo and docs, open the HTML files directly, or serve the folder:
+To view the demo and docs locally, use the production server or a simple static server:
 
 ```bash
+npm start
+# http://127.0.0.1:10000/
+# http://127.0.0.1:10000/docs/
+
+# or, if you prefer Python's static server:
 python -m http.server 4173
 # http://127.0.0.1:4173/demo/index.html
 # http://127.0.0.1:4173/docs/

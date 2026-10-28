@@ -16,9 +16,13 @@
     "dynamic-css"
   ],
   "scripts": {
+    "start": "node server.js",
     "test": "node test/laibery.test.js && node test/docs.test.js",
     "test:docs": "node test/docs.test.js",
     "docs": "node scripts/build-docs.js"
+  },
+  "engines": {
+    "node": ">=20"
   },
   "files": [
     "laibery.js",
