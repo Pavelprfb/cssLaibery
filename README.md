@@ -678,7 +678,7 @@ The public site name is detected automatically, in this order:
 1. the `SITE_NAME` environment variable, if you set one
 2. Render's `RENDER_SERVICE_NAME`
 3. the public request hostname (`RENDER_EXTERNAL_HOSTNAME`)
-4. `Laibery` as the local fallback
+4. `audio-auto-play` as the local/default fallback
 
 The detected name is written into the page `<title>`, `<meta name="application-name">`, `<meta property="og:site_name">`, and is available as JSON at `/site.json`. `GET /healthz` returns a small health payload for Render.
 

@@ -5,7 +5,8 @@
  *
  * It serves the static demo and docs, adds a health endpoint for Render, and
  * injects the deployed site's name into HTML pages. The name is taken from
- * SITE_NAME, then Render's RENDER_SERVICE_NAME, then the request hostname.
+ * SITE_NAME, then Render's RENDER_SERVICE_NAME, then the request hostname,
+ * with audio-auto-play as the local/default fallback.
  */
 
 const http = require('node:http');
@@ -15,7 +16,8 @@ const path = require('node:path');
 const ROOT = __dirname;
 const HOST = process.env.HOST || '0.0.0.0';
 const PORT = Number.parseInt(process.env.PORT || '10000', 10);
-const FALLBACK_NAME = 'Laibery';
+const BRAND_NAME = 'Laibery';
+const DEFAULT_SITE_NAME = 'audio-auto-play';
 
 let version = '0.0.0';
 try {
@@ -85,7 +87,7 @@ function detectSiteName(req) {
     return host.replace(/^www\./i, '').replace(/\.onrender\.com$/i, '').slice(0, 120);
   }
 
-  return FALLBACK_NAME;
+  return DEFAULT_SITE_NAME;
 }
 
 function siteInfo(req) {
@@ -114,7 +116,7 @@ function injectSiteInfo(html, info) {
 
   let output = html.replace('</head>', tags + '\n</head>');
 
-  if (info.name && info.name !== FALLBACK_NAME) {
+  if (info.name && info.name !== BRAND_NAME) {
     output = output.replace(/<title>Laibery(?=[\s\u2014\u2013-]|<\/title>)/, function () {
       return '<title>' + escapeHtml(info.name);
     });
